@@ -5,14 +5,8 @@
         <navComponent/>
       </div>
     </div>
-
     <div class="row">
-      <div class="col-md-2">
-        <sidebar/>
-      </div>
-      <div class="col-md-10">
-        <contentComponent/>
-      </div>
+      <trucks-content/>
     </div>
   </div>
 </template>
@@ -20,17 +14,16 @@
 
 <script>
 import navComponent from '@/components/layouts/nav-component'
-import sidebar from '@/components/layouts/sidebar'
-import contentComponent from '@/components/layouts/content-component'
+import sidebar from '@/components/layouts/sidebar-trucks'
+import trucksContent from '@/components/trucks/trucks-content'
 
 export default {
 
   name: 'App',
   components: {
-    contentComponent,
     navComponent,
-    sidebar
-
+    sidebar,
+    trucksContent
   }
 }
 </script>
