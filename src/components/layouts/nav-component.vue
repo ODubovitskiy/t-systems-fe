@@ -6,17 +6,17 @@
                 aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
-        <a class="navbar-brand" href="/">Home</a>
+        <router-link class="navbar-brand" to="/">Home</router-link>
         <div class="collapse navbar-collapse" id="navbar">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
-              <a class="nav-link " aria-current="page" href="/trucks">Trucks</a>
+              <router-link class="nav-link " to="/trucks">Trucks</router-link>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/drivers">Drivers</a>
+              <router-link class="nav-link " to="/drivers">Drivers</router-link>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/orders">Orders</a>
+              <router-link class="nav-link " to="/orders">Orders</router-link>
             </li>
           </ul>
           <form class="d-flex">
