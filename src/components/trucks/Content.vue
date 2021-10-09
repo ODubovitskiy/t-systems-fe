@@ -1,6 +1,6 @@
 <template>
   <div>
-    <table class="table mt-4 table-hover">
+    <table class="table table-hover">
       <thead>
       <tr>
         <th scope="col">id</th>
@@ -12,7 +12,9 @@
       <tbody>
       <tr v-for="truck in trucks">
         <th scope="row"> {{ truck.id }}</th>
-        <td><router-link :to="'/trucks/' + truck.id"> {{ truck.model }}</router-link></td>
+        <td>
+          <router-link :to="'/trucks/' + truck.id"> {{ truck.model }}</router-link>
+        </td>
         <td>{{ truck.registration_number }}</td>
         <td :class="{broken_truck : truck.status==='Broken',}">{{ truck.status }}</td>
       </tr>
@@ -24,7 +26,7 @@
 <script>
 
 export default {
-  name: "truck-content",
+  name: "Content",
   components: {},
   data() {
     //TODO Return real data gotten from axios-request in mounted method

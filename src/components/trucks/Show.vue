@@ -4,7 +4,6 @@
       <div class="card-header">
         Detailed information about <strong>{{ truck.model }} {{ truck.registration_number }}</strong>
       </div>
-
       <div class="card-body">
         <div class="card-text">
           <div class="modal-body">
@@ -29,13 +28,13 @@
             <div class="row">
               <div class="pt-5 modal-footer">
                 <div class="col-8">
-                  <button type="button" class="btn btn-outline-danger m-2" data-bs-toggle="modal"
-                          data-bs-target="#deleteTruckModal">Delete
+                  <button class="btn btn-outline-danger m-2" data-bs-target="#deleteTruckModal" data-bs-toggle="modal"
+                          type="button">Delete
                   </button>
                 </div>
                 <div class="col-2">
                   <router-link class="btn btn-outline-secondary m-2" to="/trucks">Close</router-link>
-                  <router-link class="btn btn-outline-info  m-2" :to="'/trucks/' + truckId + '/edit'">Edit</router-link>
+                  <router-link :to="'/trucks/' + truckId + '/edit'" class="btn btn-outline-info  m-2">Edit</router-link>
                 </div>
               </div>
             </div>
@@ -44,39 +43,35 @@
       </div>
     </div>
 
-
     <!-- Modal -->
-    <div class="modal fade" id="deleteTruckModal" tabindex="-1" aria-labelledby="deleteTruckModalLabel"
-         aria-hidden="true">
+    <div id="deleteTruckModal" aria-hidden="true" aria-labelledby="deleteTruckModalLabel" class="modal fade"
+         tabindex="-1">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="deleteTruckModalLabel">Confirm</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <h5 id="deleteTruckModalLabel" class="modal-title">Confirm</h5>
+            <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
           </div>
           <div class="modal-body">
-            Do you really want to delete <strong>{{ truck.model }} {{ truck.registration_number }}</strong>? <br> This action is irreversible.
+            Do you really want to delete <strong>{{ truck.model }} {{ truck.registration_number }}</strong>? <br> This
+            action is irreversible.
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-
-            <router-link v-on:click.native="onDelete" class="btn btn-outline-danger  m-2" :to="'/trucks/' + truckId">
+            <button class="btn btn-secondary" data-bs-dismiss="modal" type="button">Close</button>
+            <router-link :to="'/trucks/' + truckId" class="btn btn-outline-danger  m-2" v-on:click.native="onDelete">
               Delete
             </router-link>
-
           </div>
         </div>
       </div>
     </div>
-
-
   </div>
 </template>
 
 <script>
 
 export default {
-  name: "trucks-show",
+  name: "Show",
   data() {
     return {
       truckId: this.$route.params.id,
