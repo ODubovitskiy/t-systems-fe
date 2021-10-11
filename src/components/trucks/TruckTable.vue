@@ -24,10 +24,15 @@
 </template>
 
 <script>
-
+import BaseButton from '@/components/base-components/BaseButton'
 export default {
-  name: "Content",
-  components: {},
+  name: "TruckTable",
+  components: {BaseButton},
+  methods:{
+    showModal(modalName){
+      this.$store.commit('setShowModal', modalName)
+    }
+  },
   data() {
     //TODO Return real data gotten from axios-request in mounted method
     //TODO Correct href to "/api/trucks/{{ truck.id }}"

@@ -1,6 +1,20 @@
 <template>
-  <div>
-    <div class="card">
+  <div class="row">
+    <div class="col-md-2">
+      <div>
+        <button class="btn btn-outline-danger m-2 flex-fill" data-bs-target="#deleteTruckModal" data-bs-toggle="modal"
+                type="button">Delete
+        </button>
+      </div>
+      <div>
+        <router-link class="btn btn-outline-secondary m-2" to="/trucks">Back to truck list</router-link>
+      </div>
+      <div>
+        <router-link :to="'/trucks/' + truckId + '/edit'" class="btn btn-outline-info  m-2">Edit</router-link>
+      </div>
+    </div>
+
+    <div class="card col-md-10">
       <div class="card-header">
         Detailed information about <strong>{{ truck.model }} {{ truck.registration_number }}</strong>
       </div>
@@ -27,15 +41,6 @@
             </div>
             <div class="row">
               <div class="pt-5 modal-footer">
-                <div class="col-8">
-                  <button class="btn btn-outline-danger m-2" data-bs-target="#deleteTruckModal" data-bs-toggle="modal"
-                          type="button">Delete
-                  </button>
-                </div>
-                <div class="col-2">
-                  <router-link class="btn btn-outline-secondary m-2" to="/trucks">Close</router-link>
-                  <router-link :to="'/trucks/' + truckId + '/edit'" class="btn btn-outline-info  m-2">Edit</router-link>
-                </div>
               </div>
             </div>
           </div>
@@ -93,5 +98,9 @@ export default {
 </script>
 
 <style scoped>
+
+.btn{
+  width: 100%;
+}
 
 </style>
