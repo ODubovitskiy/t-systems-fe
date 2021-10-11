@@ -5,7 +5,7 @@ import {actionTypes} from "@/stores/actionTypes"
 export default createStore({
     state: {
         currentPage: '/',
-        trucksPage: {
+        trucksTab: {
             modals: {
                 truck_add: {
                     show: false,
@@ -14,6 +14,7 @@ export default createStore({
                         reg_number: "",
                         driver_shift: "",
                         load_capacity: "",
+                        status: "working".toUpperCase(),
                         city: {
                             id: ""
                         },
@@ -23,30 +24,48 @@ export default createStore({
             truckTable: {
                 trucks: ""
             },
+            truckShow: {
+                truck: {
+                    model:"",
+                    reg_number:"",
+                    driver_shift:"",
+                    load_capacity:"",
+                    city:{
+                        city : ""
+                    },
+                    status:"",
+                },
+                truckId: ""
+            },
             cities: "",
         },
     },
     mutations: {
         updateModel(state, payload) {
-            state.trucksPage.modals.truck_add.form.model = payload
+            state.trucksTab.modals.truck_add.form.model = payload
         }, updateRegNumber(state, payload) {
-            state.trucksPage.modals.truck_add.form.reg_number = payload
+            state.trucksTab.modals.truck_add.form.reg_number = payload
         }, updateDriverShift(state, payload) {
-            state.trucksPage.modals.truck_add.form.driver_shift = payload
+            state.trucksTab.modals.truck_add.form.driver_shift = payload
         }, updateLoadCapacity(state, payload) {
-            state.trucksPage.modals.truck_add.form.load_capacity = payload
+            state.trucksTab.modals.truck_add.form.load_capacity = payload
+        }, updateStatus(state, payload) {
+            state.trucksTab.modals.truck_add.form.status = payload
         }, updateCity(state, payload) {
-            state.trucksPage.modals.truck_add.form.city.id = payload
+            state.trucksTab.modals.truck_add.form.city.id = payload
         }, updateCities(state, payload) {
-            state.trucksPage.cities = payload;
+            state.trucksTab.cities = payload;
         }, updateTruckTable(state, payload) {
-            state.trucksPage.truckTable.trucks = payload;
+            state.trucksTab.truckTable.trucks = payload;
+        }, updateTruckToShow(state, payload) {
+            state.trucksTab.truckShow.truck = payload;
+        }, updateTruckId(state, payload) {
+            state.trucksTab.truckShow.truckId = payload;
         }
     },
     actions: {
         [actionTypes.SUBMIT_FORM_ADD_TRUCK]({commit, state}) {
-            let formData = state.trucksPage.modals.truck_add.form;
-            console.log(formData);
+            let formData = state.trucksTab.modals.truck_add.form;
             return axios.post("http://localhost:5000/api/trucks", formData).then(({data}) => {
                 //todo check
             });
@@ -67,6 +86,16 @@ export default createStore({
             }).then(function (response) {
                 let trucks = response.data;
                 commit("updateTruckTable", trucks)
+            });
+        },
+        [actionTypes.GET_TRUCK_BY_ID]({commit, state}) {
+            let id = state.trucksTab.truckShow.truckId;
+            return axios({
+                method: "get",
+                url: "http://localhost:5000/api/trucks/" + id,
+            }).then(function (response) {
+                let truck = response.data;
+                commit("updateTruckToShow", truck)
             });
         }
     },

@@ -1,19 +1,31 @@
 <template>
   <div class="row">
-    <div class="col-md-2">
-      <div>
-        <button class="btn btn-outline-danger m-2 flex-fill" data-bs-target="#deleteTruckModal" data-bs-toggle="modal"
-                type="button">Delete
-        </button>
-      </div>
-      <div>
-        <router-link class="btn btn-outline-secondary m-2" to="/trucks">Back to truck list</router-link>
-      </div>
-      <div>
-        <router-link :to="'/trucks/' + truckId + '/edit'" class="btn btn-outline-info  m-2">Edit</router-link>
-      </div>
-    </div>
+    <div class="sidebar col-md-2">
+      <BaseButton
+          :button="{
+          name :'Delete',
+          class :'btn btn-danger m-2',
+          type :'button',
+          toggle : 'modal',
+          target : '#deleteTruckModal',
+        }"/>
 
+      <BaseRouterLink
+          :link="{
+        class : 'btn btn-outline-secondary m-2',
+        path: '/trucks',
+        name: 'Back to list'
+       }"
+      />
+
+      <BaseRouterLink
+          :link="{
+        class : 'btn btn-outline-info  m-2',
+        path: '/trucks/'+ truckId + '/edit',
+        name: 'Edit'
+       }"
+      />
+    </div>
     <div class="card col-md-10">
       <div class="card-header">
         Detailed information about <strong>{{ truck.model }} {{ truck.registration_number }}</strong>
@@ -26,16 +38,16 @@
                 <div class="text-muted">Truck model</div>
                 <div class="text-muted">Registration number</div>
                 <div class="text-muted">Driver shift</div>
+                <div class="text-muted">City</div>
                 <div class="text-muted">Capacity</div>
-                <div class="text-muted">Current city</div>
                 <div class="text-muted">Status</div>
               </div>
               <div class="col-6">
                 <div class="text-muted">{{ truck.model }}</div>
-                <div class="text-muted">{{ truck.registration_number }}</div>
-                <div class="text-muted">GET DATA FROM BACKEND</div>
-                <div class="text-muted">GET DATA FROM BACKEND</div>
-                <div class="text-muted">GET DATA FROM BACKEND</div>
+                <div class="text-muted">{{ truck.reg_number }}</div>
+                <div class="text-muted">{{ truck.driver_shift }}</div>
+                <div class="text-muted">{{ truck.load_capacity }}</div>
+                <div class="text-muted">{{ truck.city.city }}</div>
                 <div class="text-muted">{{ truck.status }}</div>
               </div>
             </div>
@@ -62,10 +74,12 @@
             action is irreversible.
           </div>
           <div class="modal-footer">
-            <button class="btn btn-secondary" data-bs-dismiss="modal" type="button">Close</button>
-            <router-link :to="'/trucks/' + truckId" class="btn btn-outline-danger  m-2" v-on:click.native="onDelete">
-              Delete
-            </router-link>
+
+            <BaseRouterLink
+                :link="{
+                class : 'btn btn-outline-danger m-2',
+                path: '/trucks/' + truckId,
+                name: 'Delete'}"/>
           </div>
         </div>
       </div>
@@ -75,31 +89,50 @@
 
 <script>
 
+import BaseButton from "@/components/base-components/BaseButton";
+import BaseRouterLink from "@/components/base-components/BaseRouterLink";
+import {actionTypes} from "@/stores/actionTypes";
+
 export default {
   name: "Show",
-  data() {
-    return {
-      truckId: this.$route.params.id,
-      //TODO Delete in prod
-      truck: {
-        id: 1, model: "Scania", registration_number: "AA 12345", status: "Broken"
+  components: {
+    BaseButton, BaseRouterLink
+  },
+  computed: {
+    mainStore: {
+      get() {
+        return this.$store.state;
+      }
+    },
+    truck: {
+      get() {
+        return this.mainStore.trucksTab.truckShow.truck;
+      },
+      set(value) {
+        this.$store.commit('updateTruckToShow', value);
+      }
+    },
+    truckId: {
+      get() {
+        return this.mainStore.trucksTab.truckShow.truckId;
+      },
+      set(value) {
+        this.$store.commit('updateTruckId', this.pathId);
       }
     }
   },
-  mounted: function () {
-    //TODO To make GET-request with this.truckId
+  mounted() {
+    this.$store.dispatch(actionTypes.GET_TRUCK_BY_ID);
   },
-  methods: {
-    onDelete() {
-      //TODO create DELETE-request to /trucks/{truckId}
-    }
+  beforeMount() {
+    this.$store.commit('updateTruckId', this.$route.params.id)
   }
 }
 </script>
 
 <style scoped>
 
-.btn{
+.btn {
   width: 100%;
 }
 

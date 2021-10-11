@@ -17,7 +17,7 @@
             <router-link :to="'/trucks/' + truck.id"> {{ truck.model }}</router-link>
           </td>
           <td>{{ truck.reg_number }}</td>
-          <td :class="{broken_truck : truck.status==='Broken'}">{{ truck.status }}</td>
+          <td :class="{broken_truck : truck.status.toLowerCase() ==='broken'}">{{ truck.status.toLowerCase() }}</td>
         </tr>
 
       </template>
@@ -42,7 +42,7 @@ export default {
     },
     trucks: {
       get() {
-        return this.mainStore.trucksPage.truckTable.trucks;
+        return this.mainStore.trucksTab.truckTable.trucks;
       }
     },
   },

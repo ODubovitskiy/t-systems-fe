@@ -3,7 +3,7 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="addTruckLabel">Modal title</h5>
+          <h5 class="modal-title" id="addTruckLabel">Add truck</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
 
@@ -90,12 +90,12 @@ export default {
     },
     cities: {
       get() {
-        return this.mainStore.trucksPage.cities;
+        return this.mainStore.trucksTab.cities;
       }
     },
     add_truck_modal_form: {
       get() {
-        return this.mainStore.trucksPage.modals.truck_add.form;
+        return this.mainStore.trucksTab.modals.truck_add.form;
       }
     },
     model: {
@@ -136,6 +136,14 @@ export default {
       },
       set(value) {
         this.$store.commit('updateCity', value);
+      }
+    },
+    status: {
+      get() {
+        return this.add_truck_modal_form.status;
+      },
+      set(value) {
+        this.$store.commit('updateStatus', value);
       }
     },
   },
