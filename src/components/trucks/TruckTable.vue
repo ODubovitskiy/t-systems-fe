@@ -10,14 +10,18 @@
       </tr>
       </thead>
       <tbody>
-      <tr v-for="truck in trucks">
-        <th scope="row"> {{ truck.id }}</th>
-        <td>
-          <router-link :to="'/trucks/' + truck.id"> {{ truck.model }}</router-link>
-        </td>
-        <td>{{ truck.registration_number }}</td>
-        <td :class="{broken_truck : truck.status==='Broken',}">{{ truck.status }}</td>
-      </tr>
+      <template v-for="truck in trucks">
+        <tr>
+          <th scope="row"> {{ truck.id }}</th>
+          <td>
+            <router-link :to="'/trucks/' + truck.id"> {{ truck.model }}</router-link>
+          </td>
+          <td>{{ truck.reg_number }}</td>
+          <td :class="{broken_truck : truck.status==='Broken'}">{{ truck.status }}</td>
+        </tr>
+
+      </template>
+
       </tbody>
     </table>
   </div>
@@ -25,25 +29,23 @@
 
 <script>
 import BaseButton from '@/components/base-components/BaseButton'
+
 export default {
   name: "TruckTable",
   components: {BaseButton},
-  methods:{
-    showModal(modalName){
-      this.$store.commit('setShowModal', modalName)
-    }
+  methods: {},
+  computed: {
+    mainStore: {
+      get() {
+        return this.$store.state;
+      }
+    },
+    trucks: {
+      get() {
+        return this.mainStore.trucksPage.truckTable.trucks;
+      }
+    },
   },
-  data() {
-    //TODO Return real data gotten from axios-request in mounted method
-    //TODO Correct href to "/api/trucks/{{ truck.id }}"
-    return {
-      trucks: [
-        {id: 1, model: "Scania", registration_number: "AA 12345", status: "Broken"},
-        {id: 2, model: "Kamaz", registration_number: "AB 12345", status: "Ready to go"},
-        {id: 3, model: "Volvo", registration_number: "AC 12345", status: "Ready to go"}
-      ]
-    }
-  }
 }
 </script>
 

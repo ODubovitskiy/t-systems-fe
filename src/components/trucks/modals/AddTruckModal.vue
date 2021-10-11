@@ -71,7 +71,6 @@
 <script>
 
 import BaseButton from "@/components/base-components/BaseButton";
-import router from "@/router";
 
 export default {
   name: "AddTruckModal",
@@ -91,7 +90,7 @@ export default {
     },
     cities: {
       get() {
-        return this.mainStore.cities;
+        return this.mainStore.trucksPage.cities;
       }
     },
     add_truck_modal_form: {

@@ -19,8 +19,12 @@ export default createStore({
                         },
                     }
                 }
-            }
-        }, cities: "",
+            },
+            truckTable: {
+                trucks: ""
+            },
+            cities: "",
+        },
     },
     mutations: {
         updateModel(state, payload) {
@@ -34,8 +38,10 @@ export default createStore({
         }, updateCity(state, payload) {
             state.trucksPage.modals.truck_add.form.city.id = payload
         }, updateCities(state, payload) {
-            state.cities = payload;
-        },
+            state.trucksPage.cities = payload;
+        }, updateTruckTable(state, payload) {
+            state.trucksPage.truckTable.trucks = payload;
+        }
     },
     actions: {
         [actionTypes.SUBMIT_FORM_ADD_TRUCK]({commit, state}) {
@@ -54,6 +60,15 @@ export default createStore({
                 commit("updateCities", cities)
             });
         },
+        [actionTypes.GET_TRUCKS]({commit, state}) {
+            return axios({
+                method: "get",
+                url: "http://localhost:5000/api/trucks",
+            }).then(function (response) {
+                let trucks = response.data;
+                commit("updateTruckTable", trucks)
+            });
+        }
     },
 
     modules: {},

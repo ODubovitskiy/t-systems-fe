@@ -29,6 +29,7 @@ export default {
   },
   mounted() {
     this.$store.dispatch(actionTypes.GET_CITIES);
+    this.$store.dispatch(actionTypes.GET_TRUCKS);
   }
 }
 </script>

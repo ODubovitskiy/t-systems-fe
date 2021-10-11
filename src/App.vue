@@ -1,11 +1,10 @@
 <script>
 
 import navComponent from '@/components/layouts/Navbar'
-import SideBarComponent from "@/components/layouts/Sidebar"
 
 export default {
   components: {
-    navComponent, SideBarComponent
+    navComponent
   },
   name: "App",
   props: ['nav'],
@@ -33,9 +32,6 @@ export default {
       <navComponent/>
     </div>
     <div class="row">
-      <div class="col-md-2 m-0 p-0">
-        <SideBarComponent/>
-      </div>
       <div class="col-md-10 m-0 p-0 mt-4">
         <router-view/>
       </div>

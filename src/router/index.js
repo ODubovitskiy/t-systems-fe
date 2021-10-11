@@ -3,9 +3,9 @@ import Home from "@/components/home/Home";
 import DriversContent from "@/components/drivers/Content";
 import OrdersContent from "@/components/orders/Content";
 import TruckShow from "@/components/trucks/Show";
-import DriverShow from "@/components/drivers/Show";
-import Edit from "@/components/trucks/Edit";
-import DriverEdit from "@/components/drivers/Edit";
+// import DriverShow from "@/components/drivers/Show";
+import TruckEdit from "@/components/trucks/Edit";
+// import DriverEdit from "@/components/drivers/Edit";
 import TrucksPage from "@/components/trucks/TrucksPage";
 
 const routes = [
@@ -22,14 +22,14 @@ const routes = [
         path: '/drivers',
         component: DriversContent
     },
-    {
-        path: '/drivers/:id',
-        component: DriverShow
-    },
-    {
-        path: '/drivers/:id/edit',
-        component: DriverEdit
-    },
+    // {
+    //     path: '/drivers/:id',
+    //     component: DriverShow
+    // },
+    // {
+    //     path: '/drivers/:id/edit',
+    //     component: DriverEdit
+    // },
     {
         path: '/orders',
         component: OrdersContent
@@ -40,7 +40,7 @@ const routes = [
     },
     {
         path: '/trucks/:id/edit',
-        component: Edit
+        component: TruckEdit
     },
 ]
 
