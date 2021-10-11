@@ -8,6 +8,7 @@ export default {
   },
   name: "App",
   props: ['nav'],
+
   computed: {
     appRoutes() {
       return window.appRoutes;
@@ -20,7 +21,6 @@ export default {
 
   data() {
     return {
-      path: {}
     }
   }
 }
@@ -35,6 +35,11 @@ export default {
       <div class="col-md-10 m-0 p-0 mt-4">
         <router-view/>
       </div>
+    </div>
+
+    <div class="container-modals">
+
+
     </div>
   </div>
 </template>

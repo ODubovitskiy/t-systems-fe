@@ -1,5 +1,9 @@
 # logistics-fe
 
+## External link
+
+https://master.de1y8wplypomw.amplifyapp.com/
+
 ## Project setup
 ```
 npm install
