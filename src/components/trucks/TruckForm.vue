@@ -49,19 +49,6 @@
 <script>
 export default {
   name: "TruckForm",
-  data: function () {
-    return {
-      truck: {
-        id: 1, model: "Scania", registration_number: "AA 12345", status: "Broken", current_city: "Moscow"
-      },
-      cities: [
-        {id: 1, name: 'Saint-Petersburg'},
-        {id: 2, name: 'Moscow'},
-        {id: 3, name: 'Sochi'},
-      ],
-      statuses: {}
-    }
-  },
   methods: {
     onSubmit() {
       //TODO PATCH / PUT request to trucks/{id} & redirect to trucks/{id}

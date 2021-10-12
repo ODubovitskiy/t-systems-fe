@@ -3,6 +3,8 @@ const actionTypes = {
     GET_CITIES: "getCities",
     GET_TRUCKS: "getTrucks",
     GET_TRUCK_BY_ID: "getTruckById",
+    UPDATE_TRUCK: "updateTruck",
+    GET_TRUCK_STATUSES: "getTruckStatuses",
 }
 
 window.actionTypes = actionTypes;

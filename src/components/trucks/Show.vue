@@ -21,7 +21,7 @@
       <BaseRouterLink
           :link="{
         class : 'btn btn-outline-info  m-2',
-        path: '/trucks/'+ truckId + '/edit',
+        path: '/trucks/'+ id + '/edit',
         name: 'Edit'
        }"
       />
@@ -78,7 +78,7 @@
             <BaseRouterLink
                 :link="{
                 class : 'btn btn-outline-danger m-2',
-                path: '/trucks/' + truckId,
+                path: '/trucks/' + id,
                 name: 'Delete'}"/>
           </div>
         </div>
@@ -112,7 +112,7 @@ export default {
         this.$store.commit('updateTruckToShow', value);
       }
     },
-    truckId: {
+    id: {
       get() {
         return this.mainStore.trucksTab.truckShow.truckId;
       },
@@ -123,6 +123,8 @@ export default {
   },
   mounted() {
     this.$store.dispatch(actionTypes.GET_TRUCK_BY_ID);
+    this.$store.dispatch(actionTypes.GET_CITIES);
+
   },
   beforeMount() {
     this.$store.commit('updateTruckId', this.$route.params.id)
