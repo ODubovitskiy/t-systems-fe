@@ -74,12 +74,13 @@
             action is irreversible.
           </div>
           <div class="modal-footer">
+            <BaseButton
 
-            <BaseRouterLink
-                :link="{
-                class : 'btn btn-outline-danger m-2',
-                path: '/trucks/' + id,
-                name: 'Delete'}"/>
+                :button="{
+            class : 'btn btn-outline-danger m-2',
+            path: '/trucks/' + id,
+            name: 'Delete'}"
+                v-on:callback="deleteTruck()"/>
           </div>
         </div>
       </div>
@@ -124,10 +125,21 @@ export default {
   mounted() {
     this.$store.dispatch(actionTypes.GET_TRUCK_BY_ID);
     this.$store.dispatch(actionTypes.GET_CITIES);
-
+    this.$store.commit("deleteTruck", this.$route.params.id);
   },
   beforeMount() {
     this.$store.commit('updateTruckId', this.$route.params.id)
+  }, methods: {
+    deleteTruck() {
+      let els = document.getElementsByClassName("modal-backdrop");
+      for (let i = 0; i < els.length; i++) {
+        els[i].style.display = "none"
+      }
+      document.getElementById("deleteTruckModal").style.display = "none"
+      document.getElementById("deleteTruckModal").classList.remove("show")
+      this.$store.dispatch(actionTypes.DELETE_TRUCK);
+      this.$router.push("/trucks");
+    }
   }
 }
 </script>

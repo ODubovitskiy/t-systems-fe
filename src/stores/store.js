@@ -49,6 +49,9 @@ export default createStore({
                     status: "",
                 }, truckId: ""
             },
+            truckDelete: {
+                id: ""
+            },
             cities: "",
             statuses: "",
         },
@@ -102,6 +105,10 @@ export default createStore({
         }, editCity(state, payload) {
             state.trucksTab.truckEdit.truck.city = payload
         },
+
+        deleteTruck(state, payload) {
+            state.trucksTab.truckDelete.id = payload
+        },
     },
     actions: {
         [actionTypes.SUBMIT_FORM_ADD_TRUCK]({commit, state}) {
@@ -153,6 +160,12 @@ export default createStore({
                 .then(function (responce) {
                 });
         },
+        [actionTypes.DELETE_TRUCK]({commit, state}) {
+            let id = state.trucksTab.truckDelete.id;
+            return axios.delete("http://localhost:5000/api/trucks/" + id)
+                .then(function (responce) {
+                });
+        }
     },
 
     modules: {},
