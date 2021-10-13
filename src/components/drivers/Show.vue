@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="row">
     <div class="sidebar col-md-2">
       <BaseButton
           :button="{
@@ -27,7 +27,7 @@
       />
     </div>
 
-    <div class="cardcol-md-10">
+    <div class="card col-md-10">
       <div class="card-header">
         Detailed information about <strong>{{ driver.name }} {{ driver.lastName }}</strong>
       </div>
@@ -38,16 +38,18 @@
               <div class="col-6">
                 <div class="text-muted">Name</div>
                 <div class="text-muted">Personal number</div>
+                <div class="text-muted">Status</div>
                 <div class="text-muted">Hours worked</div>
                 <div class="text-muted">City</div>
                 <div class="text-muted">Truck</div>
               </div>
               <div class="col-6">
-                <div class="text-muted">{{ driver.name + " " + driver.lastName }}</div>
-                <div class="text-muted">{{ driver.personalNumber }}</div>
+                <div class="text-muted">{{ driver.name + " " + driver.last_name }}</div>
+                <div class="text-muted">{{ driver.personal_number }}</div>
+                <div class="text-muted">{{ driver.status }}</div>
                 <div class="text-muted">{{ driver.hours_worked }}</div>
-                <div class="text-muted">{{ driver.city }}</div>
-                <div class="text-muted">{{ driver.truck }}</div>
+                <div class="text-muted">{{ driver.city.city }}</div>
+                <div class="text-muted">{{ driver.truck.model }}</div>
               </div>
             </div>
           </div>
@@ -87,6 +89,7 @@
 
 import BaseButton from "@/components/base-components/BaseButton";
 import BaseRouterLink from "@/components/base-components/BaseRouterLink";
+import {actionTypes} from "@/stores/actionTypes";
 
 export default {
   name: "Show",
@@ -95,27 +98,47 @@ export default {
   }, computed: {
     mainStore: {
       get() {
-        return this.$store.state;
+        return this.$store.state.driverTab.driverShow;
       }
     },
     id: {
       get() {
-        return this.mainStore.driverTab.driverShow.id;
+        return this.mainStore.id;
+      },
+    },
+    driver: {
+      get() {
+        return this.mainStore.driver;
       },
       set(value) {
-        this.$store.commit('updateDriverId', this.id);
+        this.$store.commit('updateDriverToShow', value);
       }
-    }
+    },
+  },
+  beforeMount() {
+    this.$store.commit('updateDriverToShowId', this.$route.params.id)
   },
   mounted() {
+    this.$store.dispatch(actionTypes.GET_DRIVER_BY_ID);
+    // this.$store.commit("deleteDriver", this.$route.params.id);
   },
   methods: {
     deleteDriver() {
-
+      // let els = document.getElementsByClassName("modal-backdrop");
+      // for (let i = 0; i < els.length; i++) {
+      //   els[i].style.display = "none"
+      // }
+      // document.getElementById("deleteTruckModal").style.display = "none"
+      // document.getElementById("deleteTruckModal").classList.remove("show")
+      // this.$store.dispatch(actionTypes.DELETE_DRIVER);
+      // this.$router.push("/drivers");
     },
   }
 }
 </script>
 
 <style scoped>
+.btn {
+  width: 100%;
+}
 </style>

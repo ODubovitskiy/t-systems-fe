@@ -124,7 +124,6 @@ export default {
   },
   mounted() {
     this.$store.dispatch(actionTypes.GET_TRUCK_BY_ID);
-    this.$store.dispatch(actionTypes.GET_CITIES);
     this.$store.commit("deleteTruck", this.$route.params.id);
   },
   beforeMount() {

@@ -75,8 +75,22 @@ export default createStore({
                 truckAvailable: "",
             },
             driverShow: {
-                id: {}
+                driver: {
+                    city : {},
+                    truck : {},
+                },
+                id: ""
             },
+            // {
+            // id: "",
+            // name: "",
+            // last_name: "",
+            // personal_number: "",
+            // hours_worked: "",
+            // status: "",
+            // current_city: "",
+            // current_truck: "",
+            // },
         }
     },
     mutations: {
@@ -84,139 +98,113 @@ export default createStore({
         updateCities(state, payload) {
             state.trucksTab.cities = payload;
             state.driverTab.cities = payload;
-        }
-        ,
+        },
         updateTruckTable(state, payload) {
             state.trucksTab.truckTable.trucks = payload;
-        }
-        ,
+        },
         updateTruckStatuses(state, payload) {
             state.trucksTab.statuses = payload;
-        }
-        ,
+        },
 
         updateModel(state, payload) {
             state.trucksTab.modals.truck_add.form.model = payload
-        }
-        ,
+        },
         updateRegNumber(state, payload) {
             state.trucksTab.modals.truck_add.form.reg_number = payload
-        }
-        ,
+        },
         updateDriverShift(state, payload) {
             state.trucksTab.modals.truck_add.form.driver_shift = payload
-        }
-        ,
+        },
         updateLoadCapacity(state, payload) {
             state.trucksTab.modals.truck_add.form.load_capacity = payload
-        }
-        ,
+        },
         updateStatus(state, payload) {
             state.trucksTab.modals.truck_add.form.status = payload
-        }
-        ,
+        },
         updateCity(state, payload) {
             state.trucksTab.modals.truck_add.form.city.id = payload
-        }
-        ,
+        },
 
         updateTruckToShow(state, payload) {
             state.trucksTab.truckShow.truck = payload;
-        }
-        ,
+        },
         updateTruckId(state, payload) {
             state.trucksTab.truckShow.truckId = payload;
-        }
-        ,
+        },
 
         updateTruckToEdit(state, payload) {
             state.trucksTab.truckEdit.truck = payload;
-        }
-        ,
+        },
         updateTruckIdToEdit(state, payload) {
             state.trucksTab.truckEdit.truckId = payload;
-        }
-        ,
+        },
 
         editModel(state, payload) {
             state.trucksTab.truckEdit.truck.model = payload
-        }
-        ,
+        },
         editRegNumber(state, payload) {
             state.trucksTab.truckEdit.truck.reg_number = payload
-        }
-        ,
+        },
         editDriverShift(state, payload) {
             state.trucksTab.truckEdit.truck.driver_shift = payload
-        }
-        ,
+        },
         editLoadCapacity(state, payload) {
             state.trucksTab.truckEdit.truck.load_capacity = payload
-        }
-        ,
+        },
         editStatus(state, payload) {
             state.trucksTab.truckEdit.truck.status = payload
-        }
-        ,
+        },
         editCity(state, payload) {
             state.trucksTab.truckEdit.truck.city = payload
-        }
-        ,
+        },
 
         deleteTruck(state, payload) {
             state.trucksTab.truckDelete.id = payload
-        }
-        ,
+        },
 
         // DriversTab
 
         updateDriversTable(state, payload) {
             state.driverTab.drivers = payload;
-        }
-        ,
+        },
         updateDriversStatuses(state, payload) {
             state.driverTab.statuses = payload;
-        }
-        ,
-
+        },
         updateAddDriverName(state, payload) {
             state.driverTab.forms.addDriver.name = payload;
-        }
-        ,
+        },
         updateAddDriverLastName(state, payload) {
             state.driverTab.forms.addDriver.last_name = payload;
-        }
-        ,
+        },
         updateAddDriverPersonalNumber(state, payload) {
             state.driverTab.forms.addDriver.personal_number = payload;
-        }
-        ,
+        },
         updateAddDriverStatus(state, payload) {
             state.driverTab.forms.addDriver.last_name = payload;
-        }
-        ,
+        },
         updateAddDriverTruck(state, payload) {
             state.driverTab.forms.addDriver.truck.id = payload;
         },
         updateAddDriverCity(state, payload) {
             state.driverTab.forms.addDriver.city.id = payload;
-        }
-        ,
+        },
         updateTrucksAvailable(state, payload) {
             state.driverTab.forms.truckAvailable = payload;
-        }
-        ,
+        },
 
+        updateDriverToShowId(state, payload) {
+            state.driverTab.driverShow.id = payload;
+        }, updateDriverToShow(state, payload) {
+            state.driverTab.driverShow.driver = payload;
+        },
 
-    }
-    ,
+    },
     actions: {
         [actionTypes.SUBMIT_FORM_ADD_TRUCK]({commit, state}) {
             let formData = state.trucksTab.modals.truck_add.form;
             return axios.post("http://localhost:5000/api/trucks", formData).then(({data}) => {
             });
-        }
-        ,
+        },
         [actionTypes.GET_CITIES]({commit, state}) {
             return axios({
                 method: "get",
@@ -225,8 +213,7 @@ export default createStore({
                 let cities = response.data;
                 commit("updateCities", cities)
             });
-        }
-        ,
+        },
         [actionTypes.GET_TRUCK_STATUSES]({commit, state}) {
             return axios({
                 method: "get",
@@ -235,8 +222,7 @@ export default createStore({
                 let statuses = response.data;
                 commit("updateTruckStatuses", statuses)
             });
-        }
-        ,
+        },
         [actionTypes.GET_TRUCKS]({commit, state}) {
             return axios({
                 method: "get",
@@ -245,8 +231,7 @@ export default createStore({
                 let trucks = response.data;
                 commit("updateTruckTable", trucks)
             });
-        }
-        ,
+        },
         [actionTypes.GET_TRUCK_BY_ID]({commit, state}) {
             let id = state.trucksTab.truckShow.truckId;
             return axios({
@@ -257,23 +242,20 @@ export default createStore({
                 commit("updateTruckToShow", truck)
                 commit("updateTruckToEdit", truck)
             });
-        }
-        ,
+        },
         [actionTypes.UPDATE_TRUCK]({commit, state}) {
             let formData = state.trucksTab.truckEdit.truck;
             let id = state.trucksTab.truckEdit.truckId;
             return axios.put("http://localhost:5000/api/trucks/" + id, formData)
                 .then(function (responce) {
                 });
-        }
-        ,
+        },
         [actionTypes.DELETE_TRUCK]({commit, state}) {
             let id = state.trucksTab.truckDelete.id;
             return axios.delete("http://localhost:5000/api/trucks/" + id)
                 .then(function (responce) {
                 });
-        }
-        ,
+        },
 
         // Drivers
         [actionTypes.GET_DRIVERS]({commit, state}) {
@@ -282,29 +264,32 @@ export default createStore({
                     let drivers = responce.data;
                     commit("updateDriversTable", drivers)
                 });
-        }
-        ,
+        },
         [actionTypes.GET_AVAILABLE_TRUCKS]({commit, state}) {
             return axios.get("http://localhost:5000/api/trucks/available")
                 .then(function (responce) {
                     let trucks = responce.data;
                     commit("updateTrucksAvailable", trucks)
                 });
-        }
-        ,
+        },
         [actionTypes.SUBMIT_FORM_ADD_DRIVER]({commit, state}) {
             let formData = state.driverTab.forms.addDriver;
-            console.log(formData);
             return axios.post("http://localhost:5000/api/drivers", formData)
                 .then(function (responce) {
                 });
+        }, [actionTypes.GET_DRIVER_BY_ID]({commit, state}) {
+            let id = state.driverTab.driverShow.id;
+            return axios({
+                method: "get",
+                url: "http://localhost:5000/api/drivers/" + id,
+            }).then(function (response) {
+                let driver = response.data;
+                commit("updateDriverToShow", driver)
+                // commit("updateDriverToEdit", driver)
+            });
         }
+    },
 
-    }
-    ,
-
-    modules: {}
-    ,
+    modules: {},
     strict: process.env.NODE_ENV !== 'production',
-})
-;
+});
