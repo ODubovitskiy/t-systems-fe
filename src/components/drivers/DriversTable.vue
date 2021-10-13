@@ -13,9 +13,9 @@
       <tr v-for="driver in drivers">
         <th scope="row"> {{ driver.id }}</th>
         <td>
-          <router-link :to="'/drivers/' + driver.id"> {{ driver.name + " " + driver.lastName }}</router-link>
+          <router-link :to="'/drivers/' + driver.id"> {{ driver.name + " " + driver.last_name }}</router-link>
         </td>
-        <td>{{ driver.personalNumber }}</td>
+        <td>{{ driver.personal_number }}</td>
         <td> {{ driver.status }}</td>
       </tr>
       </tbody>
@@ -25,22 +25,20 @@
 
 <script>
 export default {
-  name: "Content",
-  data: function () {
-    return {
-      drivers: [
-        {
-          id: 1,
-          name: "John",
-          lastName: "Doe",
-          personalNumber: "12345",
-          status: "Working"
-        }
-      ]
+  name: "DriversTable",
+  computed: {
+    mainStore: {
+      get() {
+        return this.$store.state;
+      }
+    },
+    drivers: {
+      get() {
+        return this.mainStore.driverTab.drivers;
+      },
+    },
 
-    }
-  }
-
+  },
 }
 </script>
 

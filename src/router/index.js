@@ -1,12 +1,12 @@
 import {createRouter, createWebHistory} from 'vue-router'
 import Home from "@/components/home/Home";
-import DriversContent from "@/components/drivers/Content";
 import OrdersContent from "@/components/orders/Content";
 import TruckShow from "@/components/trucks/Show";
-// import DriverShow from "@/components/drivers/Show";
+import DriverShow from "@/components/drivers/Show";
 import TruckEdit from "@/components/trucks/Edit";
-// import DriverEdit from "@/components/drivers/Edit";
+import DriverEdit from "@/components/drivers/Edit";
 import TrucksPage from "@/components/trucks/TrucksPage";
+import DriversPage from "@/components/drivers/DriversPage";
 
 const routes = [
     {
@@ -20,16 +20,16 @@ const routes = [
     },
     {
         path: '/drivers',
-        component: DriversContent
+        component: DriversPage
     },
-    // {
-    //     path: '/drivers/:id',
-    //     component: DriverShow
-    // },
-    // {
-    //     path: '/drivers/:id/edit',
-    //     component: DriverEdit
-    // },
+    {
+        path: '/drivers/:id',
+        component: DriverShow
+    },
+    {
+        path: '/drivers/:id/edit',
+        component: DriverEdit
+    },
     {
         path: '/orders',
         component: OrdersContent
