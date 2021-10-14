@@ -36,20 +36,14 @@
           <div class="modal-body">
             <div class="row mb-5">
               <div class="col-6">
-                <div class="text-muted">Name</div>
-                <div class="text-muted">Personal number</div>
-                <div class="text-muted">Status</div>
-                <div class="text-muted">Hours worked</div>
-                <div class="text-muted">City</div>
-                <div class="text-muted">Truck</div>
+                <div class="text-muted">Name<strong>: {{ driver.name + " " + driver.last_name }}</strong></div>
+                <div class="text-muted">Personal number:<strong> {{ driver.personal_number }}</strong></div>
+                <div class="text-muted">Status<strong>: {{ driver.status }}</strong></div>
+                <div class="text-muted">Hours worked:<strong> {{ driver.hours_worked }}</strong></div>
+                <div class="text-muted">City<strong>: {{ driver.city.city }}</strong></div>
+                <div class="text-muted">Truck<strong>: {{ driver.truck.model }}</strong></div>
               </div>
               <div class="col-6">
-                <div class="text-muted">{{ driver.name + " " + driver.last_name }}</div>
-                <div class="text-muted">{{ driver.personal_number }}</div>
-                <div class="text-muted">{{ driver.status }}</div>
-                <div class="text-muted">{{ driver.hours_worked }}</div>
-                <div class="text-muted">{{ driver.city.city }}</div>
-                <div class="text-muted">{{ driver.truck.model }}</div>
               </div>
             </div>
           </div>
@@ -67,7 +61,7 @@
             <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
           </div>
           <div class="modal-body">
-            Do you really want to delete <strong>{{ driver.name }} {{ driver.lastName }}</strong>? <br> This
+            Do you really want to delete <strong>{{ driver.name }} {{ driver.last_name }}</strong>? <br> This
             action is irreversible.
           </div>
           <div class="modal-footer">
@@ -117,6 +111,8 @@ export default {
   },
   beforeMount() {
     this.$store.commit('updateDriverToShowId', this.$route.params.id)
+    this.$store.dispatch(actionTypes.GET_DRIVER_BY_ID);
+
   },
   mounted() {
     this.$store.dispatch(actionTypes.GET_DRIVER_BY_ID);

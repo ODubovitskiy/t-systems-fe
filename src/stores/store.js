@@ -72,25 +72,36 @@ export default createStore({
                         id: ""
                     }
                 },
-                truckAvailable: "",
+                driverEdit: {
+                    form: {
+                        name: "",
+                        last_name: "",
+                        personal_number: "",
+                        hours_worked: "",
+                        status: "",
+                        city: {
+                            id: ""
+                        },
+                        truck: {
+                            id: ""
+                        },
+                    },
+                    id: "",
+                    cities: {},
+                    statuses: {
+                        id: "",
+                        status: ""
+                    },
+                    available_trucks: {},
+                },
             },
             driverShow: {
                 driver: {
-                    city : {},
-                    truck : {},
+                    city: {},
+                    truck: {},
                 },
                 id: ""
             },
-            // {
-            // id: "",
-            // name: "",
-            // last_name: "",
-            // personal_number: "",
-            // hours_worked: "",
-            // status: "",
-            // current_city: "",
-            // current_truck: "",
-            // },
         }
     },
     mutations: {
@@ -98,6 +109,7 @@ export default createStore({
         updateCities(state, payload) {
             state.trucksTab.cities = payload;
             state.driverTab.cities = payload;
+            state.driverTab.forms.driverEdit.cities = payload;
         },
         updateTruckTable(state, payload) {
             state.trucksTab.truckTable.trucks = payload;
@@ -168,7 +180,7 @@ export default createStore({
             state.driverTab.drivers = payload;
         },
         updateDriversStatuses(state, payload) {
-            state.driverTab.statuses = payload;
+            state.driverTab.forms.statuses = payload;
         },
         updateAddDriverName(state, payload) {
             state.driverTab.forms.addDriver.name = payload;
@@ -179,9 +191,6 @@ export default createStore({
         updateAddDriverPersonalNumber(state, payload) {
             state.driverTab.forms.addDriver.personal_number = payload;
         },
-        updateAddDriverStatus(state, payload) {
-            state.driverTab.forms.addDriver.last_name = payload;
-        },
         updateAddDriverTruck(state, payload) {
             state.driverTab.forms.addDriver.truck.id = payload;
         },
@@ -190,6 +199,7 @@ export default createStore({
         },
         updateTrucksAvailable(state, payload) {
             state.driverTab.forms.truckAvailable = payload;
+            state.driverTab.forms.driverEdit.available_trucks = payload;
         },
 
         updateDriverToShowId(state, payload) {
@@ -198,7 +208,28 @@ export default createStore({
             state.driverTab.driverShow.driver = payload;
         },
 
+        updateDriverIdToEdit(state, payload) {
+            state.driverTab.forms.driverEdit.id = payload;
+        }, updateDriverStatusToEdit(state, payload) {
+            state.driverTab.forms.driverEdit.form.status = payload;
+        }, updateDriverNameToEdit(state, payload) {
+            state.driverTab.forms.driverEdit.form.name = payload;
+        }, updateDriverLastNameToEdit(state, payload) {
+            state.driverTab.forms.driverEdit.form.last_name = payload;
+        }, updateDriverPersonalNumberToEdit(state, payload) {
+            state.driverTab.forms.driverEdit.form.personal_number = payload;
+        }, updateDriverHoursWorkedToEdit(state, payload) {
+            state.driverTab.forms.driverEdit.form.hours_worked = payload;
+        }, updateDriverCityToEdit(state, payload) {
+            state.driverTab.forms.driverEdit.form.city.id = payload;
+        }, updateDriverTruckToEdit(state, payload) {
+            state.driverTab.forms.driverEdit.form.truck.id = payload;
+        }, updateDriverStatusesToEdit(state, payload) {
+            state.driverTab.forms.driverEdit.statuses = payload;
+        },
     },
+
+
     actions: {
         [actionTypes.SUBMIT_FORM_ADD_TRUCK]({commit, state}) {
             let formData = state.trucksTab.modals.truck_add.form;
@@ -242,15 +273,13 @@ export default createStore({
                 commit("updateTruckToShow", truck)
                 commit("updateTruckToEdit", truck)
             });
-        },
-        [actionTypes.UPDATE_TRUCK]({commit, state}) {
+        }, [actionTypes.UPDATE_TRUCK]({commit, state}) {
             let formData = state.trucksTab.truckEdit.truck;
             let id = state.trucksTab.truckEdit.truckId;
             return axios.put("http://localhost:5000/api/trucks/" + id, formData)
                 .then(function (responce) {
                 });
-        },
-        [actionTypes.DELETE_TRUCK]({commit, state}) {
+        }, [actionTypes.DELETE_TRUCK]({commit, state}) {
             let id = state.trucksTab.truckDelete.id;
             return axios.delete("http://localhost:5000/api/trucks/" + id)
                 .then(function (responce) {
@@ -285,8 +314,18 @@ export default createStore({
             }).then(function (response) {
                 let driver = response.data;
                 commit("updateDriverToShow", driver)
-                // commit("updateDriverToEdit", driver)
             });
+        }, [actionTypes.UPDATE_DRIVER]({commit, state}) {
+            let formData = state.driverTab.forms.driverEdit.form;
+            let id = state.driverTab.forms.driverEdit.id;
+            return axios.put("http://localhost:5000/api/drivers/" + id, formData)
+                .then(function (responce) {
+                });
+        }, [actionTypes.GET_DRIVER_STATUSES]({commit, state}) {
+            return axios.get("http://localhost:5000/api/driver-statuses/")
+                .then(function (responce) {
+                    commit("updateDriverStatusesToEdit", responce.data)
+                });
         }
     },
 

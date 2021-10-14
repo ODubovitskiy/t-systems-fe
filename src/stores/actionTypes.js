@@ -11,7 +11,9 @@ const actionTypes = {
     GET_DRIVERS: "getDrivers",
     GET_AVAILABLE_TRUCKS: "getAvailableTrucks",
     GET_DRIVER_BY_ID: "getDriverById",
+    UPDATE_DRIVER: "updateDriver",
     DELETE_DRIVER: "deleteDriver",
+    GET_DRIVER_STATUSES: "getDriverStatuses",
 }
 
 window.actionTypes = actionTypes;

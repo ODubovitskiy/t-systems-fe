@@ -16,7 +16,7 @@
           <router-link :to="'/drivers/' + driver.id"> {{ driver.name + " " + driver.last_name }}</router-link>
         </td>
         <td>{{ driver.personal_number }}</td>
-        <td> {{ driver.status }}</td>
+        <td> {{ driver.status.charAt(0).toUpperCase() + driver.status.slice(1).toLowerCase().replace("_", " ") }}</td>
       </tr>
       </tbody>
     </table>
