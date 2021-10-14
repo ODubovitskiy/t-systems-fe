@@ -58,14 +58,12 @@
         <div class="modal-content">
           <div class="modal-header">
             <h5 id="deleteDriverModalLabel" class="modal-title">Confirm</h5>
-            <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
           </div>
           <div class="modal-body">
             Do you really want to delete <strong>{{ driver.name }} {{ driver.last_name }}</strong>? <br> This
             action is irreversible.
           </div>
           <div class="modal-footer">
-            <button class="btn btn-secondary" data-bs-dismiss="modal" type="button">Close</button>
             <BaseButton
                 :button="{
                   class : 'btn btn-outline-danger m-2',
@@ -116,18 +114,18 @@ export default {
   },
   mounted() {
     this.$store.dispatch(actionTypes.GET_DRIVER_BY_ID);
-    // this.$store.commit("deleteDriver", this.$route.params.id);
+    this.$store.commit("deleteDriver", this.$route.params.id);
   },
   methods: {
     deleteDriver() {
-      // let els = document.getElementsByClassName("modal-backdrop");
-      // for (let i = 0; i < els.length; i++) {
-      //   els[i].style.display = "none"
-      // }
-      // document.getElementById("deleteTruckModal").style.display = "none"
-      // document.getElementById("deleteTruckModal").classList.remove("show")
-      // this.$store.dispatch(actionTypes.DELETE_DRIVER);
-      // this.$router.push("/drivers");
+      let els = document.getElementsByClassName("modal-backdrop");
+      for (let i = 0; i < els.length; i++) {
+        els[i].style.display = "none"
+      }
+      document.getElementById("deleteDriverModal").style.display = "none"
+      document.getElementById("deleteDriverModal").classList.remove("show")
+      this.$store.dispatch(actionTypes.DELETE_DRIVER);
+      this.$router.push("/drivers");
     },
   }
 }

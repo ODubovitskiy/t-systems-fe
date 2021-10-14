@@ -102,6 +102,9 @@ export default createStore({
                 },
                 id: ""
             },
+            driverDelete: {
+                id: ""
+            }
         }
     },
     mutations: {
@@ -227,6 +230,10 @@ export default createStore({
         }, updateDriverStatusesToEdit(state, payload) {
             state.driverTab.forms.driverEdit.statuses = payload;
         },
+
+        deleteDriver(state, payload) {
+            state.driverTab.driverDelete.id = payload;
+        },
     },
 
 
@@ -325,6 +332,11 @@ export default createStore({
             return axios.get("http://localhost:5000/api/driver-statuses/")
                 .then(function (responce) {
                     commit("updateDriverStatusesToEdit", responce.data)
+                });
+        }, [actionTypes.DELETE_DRIVER]({commit, state}) {
+            let id = state.driverTab.driverDelete.id;
+            return axios.delete("http://localhost:5000/api/drivers/" + id)
+                .then(function (responce) {
                 });
         }
     },
