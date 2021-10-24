@@ -29,7 +29,7 @@
 
     <div class="card col-md-10">
       <div class="card-header">
-        Detailed information about <strong>{{ driver.name }} {{ driver.lastName }}</strong>
+        Detailed information about <strong>{{ driver.name }} {{ driver.last_name }}</strong>
       </div>
       <div class="card-body">
         <div class="card-text">
@@ -41,7 +41,7 @@
                 <div class="text-muted">Status<strong>: {{ driver.status }}</strong></div>
                 <div class="text-muted">Hours worked:<strong> {{ driver.hours_worked }}</strong></div>
                 <div class="text-muted">City<strong>: {{ driver.city.city }}</strong></div>
-                <div class="text-muted">Truck<strong>: {{ driver.truck.model }}</strong></div>
+                <div class="text-muted">Truck<strong>: {{ driver.truck === null ? "Truck is not stated": driver.truck.model }}</strong></div>
               </div>
               <div class="col-6">
               </div>

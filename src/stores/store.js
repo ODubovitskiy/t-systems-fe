@@ -1,6 +1,7 @@
 import {createStore} from 'vuex'
 import axios from "axios";
 import {actionTypes} from "@/stores/actionTypes"
+import {useToast} from 'vue-toastification'
 
 export default createStore({
     state: {
@@ -290,6 +291,14 @@ export default createStore({
             let id = state.trucksTab.truckDelete.id;
             return axios.delete("http://localhost:5000/api/trucks/" + id)
                 .then(function (responce) {
+                    useToast().success("Truck has been successfully deleted",{
+
+                    })
+                })
+                .catch(function (error) {
+                    useToast().warning(error.response.data.error_description,{
+
+                    })
                 });
         },
 

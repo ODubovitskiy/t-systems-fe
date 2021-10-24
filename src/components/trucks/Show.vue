@@ -29,6 +29,7 @@
     <div class="card col-md-10">
       <div class="card-header">
         Detailed information about <strong>{{ truck.model }} {{ truck.registration_number }}</strong>
+
       </div>
       <div class="card-body">
         <div class="card-text">
