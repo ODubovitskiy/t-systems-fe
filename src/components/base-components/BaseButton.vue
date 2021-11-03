@@ -1,13 +1,11 @@
 <template>
-  <div>
-    <button :class="button.class"
-            :type="button.type"
-            :data-bs-toggle="button.toggle"
-            :data-bs-target="button.target"
-            :data-bs-dismiss="button.dismiss"
-            @click="callback">{{ button.name }}
-    </button>
-  </div>
+  <button class="base-button" :class="button.class"
+          :type="button.type"
+          :data-bs-toggle="button.toggle"
+          :data-bs-target="button.target"
+          :data-bs-dismiss="button.dismiss"
+          @click="callback">{{ button.name }}
+  </button>
 </template>
 
 <script>
@@ -24,8 +22,8 @@ export default {
 
 <style scoped>
 
-button {
-  width: 100%;
+.base-button {
+  max-width: 100%;
 }
 
 </style>
