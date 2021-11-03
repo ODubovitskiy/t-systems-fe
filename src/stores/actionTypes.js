@@ -14,6 +14,9 @@ const actionTypes = {
     UPDATE_DRIVER: "updateDriver",
     DELETE_DRIVER: "deleteDriver",
     GET_DRIVER_STATUSES: "getDriverStatuses",
+
+    GET_SHIPMENTS_PREPARED : "getShipmentsPrepared",
+    GET_PREORDER : "getPreOrder"
 }
 
 window.actionTypes = actionTypes;

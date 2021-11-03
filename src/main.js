@@ -12,7 +12,7 @@ createApp(App)
     .use(store)
     .use(router)
     .use(Toast, {
-        timeout:2000,
+        timeout:5000,
         hideProgressBar: true,
         transition: "Vue-Toastification__fade"
     })
