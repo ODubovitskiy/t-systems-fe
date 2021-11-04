@@ -47,8 +47,8 @@
                 <div class="text-muted">{{ truck.model }}</div>
                 <div class="text-muted">{{ truck.reg_number }}</div>
                 <div class="text-muted">{{ truck.driver_shift }}</div>
-                <div class="text-muted">{{ truck.load_capacity }}</div>
                 <div class="text-muted">{{ truck.city.city }}</div>
+                <div class="text-muted">{{ truck.load_capacity }}</div>
                 <div class="text-muted">{{ truck.status }}</div>
               </div>
             </div>

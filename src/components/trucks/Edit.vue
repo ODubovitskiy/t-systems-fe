@@ -27,10 +27,12 @@
                  type="text">
         </div>
         <div class="form-group mb-3">
-          <label class="form-label float-start" for="driver-shift">Driver shift</label>
-          <input id="driver-shift" v-model="driver_shift" class="form-control" name="driver_shift"
-                 placeholder="Driver shift"
-                 type="text">
+          <label for="driver-shift" class="form-label float-start">Driver shift</label>
+          <select v-model="driver_shift" name="driver_shift" id="driver-shift" class="form-control" >
+            <option value="" disabled>Select driver shift size</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+          </select>
         </div>
         <div class="form-group mb-3">
           <label class="form-label float-start" for="load-capacity">Capacity</label>

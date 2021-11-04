@@ -106,14 +106,19 @@ export default createStore({
             driverDelete: {
                 id: ""
             }
-        }
+        },
+        driverPersonalAccount: {
+            driver: {},
+            transportOrder: {},
+        },
     },
+    
     mutations: {
-
         updateCities(state, payload) {
             state.trucksTab.cities = payload;
             state.driverTab.cities = payload;
             state.driverTab.forms.driverEdit.cities = payload;
+            state.ordersTab.cities = payload;
         },
         updateTruckTable(state, payload) {
             state.trucksTab.truckTable.trucks = payload;
@@ -231,18 +236,21 @@ export default createStore({
         }, updateDriverStatusesToEdit(state, payload) {
             state.driverTab.forms.driverEdit.statuses = payload;
         },
-
         deleteDriver(state, payload) {
             state.driverTab.driverDelete.id = payload;
         },
     },
 
-
     actions: {
         [actionTypes.SUBMIT_FORM_ADD_TRUCK]({commit, state}) {
             let formData = state.trucksTab.modals.truck_add.form;
-            return axios.post("http://localhost:5000/api/trucks", formData).then(({data}) => {
-            });
+            return axios.post("http://localhost:5000/api/trucks", formData)
+                .then(function (response) {
+                    useToast().success("You have successfully stored truck in database", {})
+                })
+                .catch(function (error) {
+                    useToast().warning(error.response.data.error_description, {})
+                });
         },
         [actionTypes.GET_CITIES]({commit, state}) {
             return axios({
@@ -285,42 +293,45 @@ export default createStore({
             let formData = state.trucksTab.truckEdit.truck;
             let id = state.trucksTab.truckEdit.truckId;
             return axios.put("http://localhost:5000/api/trucks/" + id, formData)
-                .then(function (responce) {
+                .then(function (response) {
+                    useToast().success("Truck has been successfully updated", {})
+                }).catch(function (error) {
+                    useToast().warning(error.response.data.error_description, {})
                 });
         }, [actionTypes.DELETE_TRUCK]({commit, state}) {
             let id = state.trucksTab.truckDelete.id;
             return axios.delete("http://localhost:5000/api/trucks/" + id)
-                .then(function (responce) {
-                    useToast().success("Truck has been successfully deleted",{
-
-                    })
+                .then(function (response) {
+                    useToast().success("Truck has been successfully deleted", {})
                 })
                 .catch(function (error) {
-                    useToast().warning(error.response.data.error_description,{
-
-                    })
+                    useToast().warning(error.response.data.error_description, {})
                 });
         },
 
         // Drivers
         [actionTypes.GET_DRIVERS]({commit, state}) {
             return axios.get("http://localhost:5000/api/drivers/")
-                .then(function (responce) {
-                    let drivers = responce.data;
+                .then(function (response) {
+                    let drivers = response.data;
                     commit("updateDriversTable", drivers)
                 });
         },
         [actionTypes.GET_AVAILABLE_TRUCKS]({commit, state}) {
             return axios.get("http://localhost:5000/api/trucks/available")
-                .then(function (responce) {
-                    let trucks = responce.data;
+                .then(function (response) {
+                    let trucks = response.data;
                     commit("updateTrucksAvailable", trucks)
                 });
         },
         [actionTypes.SUBMIT_FORM_ADD_DRIVER]({commit, state}) {
             let formData = state.driverTab.forms.addDriver;
             return axios.post("http://localhost:5000/api/drivers", formData)
-                .then(function (responce) {
+                .then(function (response) {
+                    useToast().success(response.data + " has been stored in database", {})
+                })
+                .catch(function (error) {
+                    useToast().warning(error.response.data.error_description, {})
                 });
         }, [actionTypes.GET_DRIVER_BY_ID]({commit, state}) {
             let id = state.driverTab.driverShow.id;
@@ -329,25 +340,45 @@ export default createStore({
                 url: "http://localhost:5000/api/drivers/" + id,
             }).then(function (response) {
                 let driver = response.data;
-                commit("updateDriverToShow", driver)
+                commit("updateDriverToShow", driver);
+                commit("updateDriverNameToEdit", driver.name);
+                commit("updateDriverLastNameToEdit", driver.last_name);
+                commit("updateDriverPersonalNumberToEdit", driver.personal_number);
+                commit("updateDriverHoursWorkedToEdit", driver.hours_worked);
+                commit("updateDriverCityToEdit", driver.city);
+                commit("updateDriverTruckToEdit", driver.truck);
+                commit("updateDriverStatusesToEdit", driver.status);
             });
         }, [actionTypes.UPDATE_DRIVER]({commit, state}) {
             let formData = state.driverTab.forms.driverEdit.form;
             let id = state.driverTab.forms.driverEdit.id;
             return axios.put("http://localhost:5000/api/drivers/" + id, formData)
-                .then(function (responce) {
+                .then(function (response) {
                 });
         }, [actionTypes.GET_DRIVER_STATUSES]({commit, state}) {
             return axios.get("http://localhost:5000/api/driver-statuses/")
-                .then(function (responce) {
-                    commit("updateDriverStatusesToEdit", responce.data)
+                .then(function (response) {
+                    commit("updateDriverStatusesToEdit", response.data)
                 });
         }, [actionTypes.DELETE_DRIVER]({commit, state}) {
             let id = state.driverTab.driverDelete.id;
             return axios.delete("http://localhost:5000/api/drivers/" + id)
-                .then(function (responce) {
+                .then(function (response) {
+                    useToast().success("Driver has been successfully removed from database", {})
+                })
+                .catch(function (error) {
+                    useToast().warning(error.response.data.error_description, {})
                 });
-        }
+        },
+
+        // Orders
+        [actionTypes.GET_PRE_ORDER]({commit, state}) {
+            return axios.get("http://localhost:5000/api/orders/preorder")
+                .then(function (response) {
+                    let preOrder = response.data;
+                    console.log(response.data);
+                });
+        },
     },
 
     modules: {},
