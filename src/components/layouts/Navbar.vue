@@ -17,6 +17,9 @@
           <li class="nav-item">
             <router-link class="nav-link " to="/orders">Orders</router-link>
           </li>
+          <li class="nav-item">
+            <router-link class="nav-link " to="/drivers/personal-account/">Driver Personal Account</router-link>
+          </li>
         </ul>
         <form class="d-flex">
           <input aria-label="Search" class="form-control me-2" placeholder="Search" type="search">
