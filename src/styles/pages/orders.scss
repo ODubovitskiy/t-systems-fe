@@ -1,0 +1,102 @@
+.orders{
+  display: flex;
+  flex-direction: column;
+
+  .section{
+    padding-bottom: 32px;
+  }
+
+  .orders-dashboard{
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 32px;
+
+    &__title{
+      display: block;
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 24px;
+      text-align: left;
+    }
+
+    &__row{
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+
+    &__column{
+      width:200px;
+      display: flex;
+      justify-content: flex-start;
+
+      &--head{
+        font-weight: bold;
+      }
+    }
+  }
+
+  .selected-orders{
+    margin-bottom: 32px;
+
+    &__title{
+      display: block;
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 24px;
+      text-align: left;
+    }
+
+    &-order{
+      display: flex;
+      flex-direction: row;
+      max-width: 50%;
+      justify-content: flex-start;
+      border-radius: 4px;
+      border: 1px solid #2c3e50;
+      padding: 16px;
+      margin-bottom: 16px;
+
+      &__name{
+        font-weight: bold;
+        margin-right: 16px;
+      }
+
+      &__direction{
+        margin-right: 16px;
+      }
+    }
+  }
+
+  .road-info{
+    display: flex;
+    flex-direction: row;
+    width: 50%;
+    justify-content: space-between;
+
+    .available-trucks{
+      &__title{
+        display: block;
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 24px;
+        text-align: left;
+      }
+    }
+
+    .available-drivers{
+      &__title{
+        display: block;
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 24px;
+        text-align: left;
+      }
+    }
+  }
+
+  &__btn{
+    margin: 32px 0 32px auto;
+  }
+}
