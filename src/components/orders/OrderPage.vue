@@ -36,18 +36,22 @@
           <div class="road-info">
             <div class="available-trucks">
               <span class="available-trucks__title">Available trucks</span>
-              <div v-if="trucksAvailable">
-                <div v-for="truck  of this.trucks">
-                  <span>{{ truck.model }} {{ truck.reg_number }}</span>
-                </div>
+              <div v-if="this.isTrucksAvailable">
+<!--                <div v-for="truck  of this.trucks">-->
+                  <OrderTruck
+                      :trucks=this.trucks
+                      @selectedTruck="addToOrderTruck"/>
+<!--                </div>-->
               </div>
-              <div v-else>No trucks</div>
             </div>
             <div class="available-drivers">
-                <span class="available-drivers__title">Available drivers</span>
-              <div v-if="driversAvailable">
+              <span class="available-drivers__title">Available drivers</span>
+              <div v-if="this.isDriversAvailable">
                 <div v-for="driver of this.drivers">
-                  <span>{{ driver.name }} {{ driver.last_name }}</span>
+                  <OrderDriver
+                      :driver=driver
+                      @selectedDriver="addToOrderDrivers(driver)"
+                  />
                 </div>
               </div>
             </div>
@@ -55,12 +59,12 @@
           <hr class="section__hr">
         </section>
 
-        <!--        <BaseButton-->
-        <!--            :button="{-->
-        <!--        name: 'Create order',-->
-        <!--        class: 'orders__btn w-25 btn btn-primary'-->
-        <!--          }"-->
-        <!--            v-on:callback="createOrder()"/>-->
+        <BaseButton
+            :button="{
+                name: 'Create order',
+                class: 'orders__btn w-25 btn btn-primary'
+                  }"
+            v-on:callback="createOrder(this.transportOrder)"/>
       </div>
     </section>
   </div>
@@ -69,13 +73,15 @@
 <script>
 import ShipmentToDeliver from "@/components/orders/ShipmentToDeliver";
 import BaseButton from "@/components/base-components/BaseButton";
+import OrderDriver from "@/components/orders/OrderDriver";
+import OrderTruck from "@/components/orders/OrderTruck";
 
 import axios from "axios";
 import {useToast} from "vue-toastification";
 
 export default {
   name: "OrderPage",
-  components: {ShipmentToDeliver, BaseButton},
+  components: {ShipmentToDeliver, BaseButton, OrderDriver, OrderTruck},
   mounted() {
     this.getShipments()
     this.getCities()
@@ -113,13 +119,13 @@ export default {
       this.createPreOrder();
     },
     createPreOrder() {
-      console.log(this.chosenShipments);
       if (this.chosenShipments.length > 0) {
         let wayPoints = [];
         for (let item of this.chosenShipments) {
           let wayPointLoading = {};
           Object.assign(wayPointLoading, {
             shipment: {
+              id : item.shipment.id,
               name: item.shipment.name,
               weight: item.shipment.weight,
               status: item.shipment.status
@@ -134,6 +140,7 @@ export default {
           let wayPointUnloading = {};
           Object.assign(wayPointUnloading, {
             shipment: {
+              id : item.shipment.id,
               name: item.shipment.name,
               weight: item.shipment.weight,
               status: item.shipment.status
@@ -145,20 +152,81 @@ export default {
           });
           wayPoints.push(wayPointUnloading);
         }
-        console.log(wayPoints);
         let self = this;
         axios.post("http://localhost:5000/api/orders/preorder", {way_points: wayPoints})
             .then(function (response) {
-              self.drivers = response.data.drivers;
               self.trucks = response.data.trucks;
-              self.trucksAvailable = true;
-              self.driversAvailable = true;
+              self.drivers = response.data.drivers;
+              self.transportOrder.way_points = wayPoints;
+              self.isTrucksAvailable = true;
+              self.isDriversAvailable = true;
             })
             .catch(function (error) {
-              self.trucksAvailable = false;
-              self.driversAvailable = false;
+              self.isTrucksAvailable = false;
+              self.isDriversAvailable = false;
               useToast().warning(error.response.data.error_description)
             });
+      } else {
+        this.isTrucksAvailable = false;
+        this.isDriversAvailable = false
+      }
+    },
+    addToOrderDrivers(driver) {
+      if (!this.isInclude(this.transportOrder.drivers, driver)) {
+        this.transportOrder.drivers.push(driver)
+      } else {
+        const index = this.transportOrder.drivers.indexOf(driver);
+        if (index > -1) {
+          this.transportOrder.drivers.splice(index, 1);
+        }
+      }
+    },
+    addToOrderTruck(truck) {
+      console.log(truck.reg_number);
+      if (this.transportOrder.truck !== "") {
+        this.transportOrder.truck = "";
+      } else
+        this.transportOrder.truck = truck;
+    },
+    createOrder(transportOrder) {
+      if (this.transportOrder.truck !== ""
+          && this.transportOrder.way_points.length !== 0
+          && this.transportOrder.drivers.length !== 0) {
+        let self = this;
+        axios.post("http://localhost:5000/api/orders", {
+          truck: transportOrder.truck,
+          drivers: transportOrder.drivers,
+          way_points: transportOrder.way_points,
+        })
+            .then(function (response) {
+              useToast().success("Order № " + response.data.number + " has been created.")
+              self.$router.go("/orders");
+            })
+            .catch(function (error) {
+              if (error.response.data.error_description === "") {
+                let response = "Please input data"
+                useToast().warning(response)
+              } else
+                useToast().warning(error.response.data.error_description)
+            });
+      } else {
+        let response = "Please input data"
+        useToast().warning(response)
+      }
+    },
+    isInclude(arr, object2) {
+      for (const object1 of arr) {
+        const keys1 = Object.keys(object1);
+        const keys2 = Object.keys(object2);
+        if (keys1.length !== keys2.length) {
+          return false;
+        }
+        for (let key of keys1) {
+          if (object1[key] !== object2[key]) {
+            return false;
+          }
+        }
+        return true;
       }
     }
   },
@@ -169,8 +237,13 @@ export default {
       chosenShipments: [],
       drivers: [],
       trucks: [],
-      trucksAvailable : false,
-      driversAvailable : false
+      transportOrder: {
+        drivers: [],
+        truck: "",
+        way_points: []
+      },
+      isTrucksAvailable: false,
+      isDriversAvailable: false,
     }
   }
 

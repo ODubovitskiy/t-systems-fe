@@ -118,7 +118,6 @@ export default createStore({
             state.trucksTab.cities = payload;
             state.driverTab.cities = payload;
             state.driverTab.forms.driverEdit.cities = payload;
-            state.ordersTab.cities = payload;
         },
         updateTruckTable(state, payload) {
             state.trucksTab.truckTable.trucks = payload;
