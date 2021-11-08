@@ -8,6 +8,7 @@ import TrucksPage from "@/components/trucks/TrucksPage";
 import DriversPage from "@/components/drivers/DriversPage";
 import DriverPA from "@/components/DriverPA";
 import OrderPage from "@/components/orders/OrderPage";
+import Orders from "@/components/orders/Orders";
 
 const routes = [
     {
@@ -32,8 +33,12 @@ const routes = [
         component: DriverEdit
     },
     {
-        path: '/orders',
+        path: '/orders/create',
         component: OrderPage
+    },
+    {
+        path: '/orders',
+        component: Orders
     },
     {
         path: '/trucks/:id',

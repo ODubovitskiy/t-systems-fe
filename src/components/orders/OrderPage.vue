@@ -1,72 +1,84 @@
 <template>
   <div class="orders">
-    <section class="section">
-      <div class="orders-dashboard">
-        <span class="orders-dashboard__title">Boxes to deliver</span>
-        <div class="orders-dashboard__row orders-dashboard__row--header">
-          <div class="orders-dashboard__column orders-dashboard__column--head">Shipments</div>
-          <div class="orders-dashboard__column orders-dashboard__column--head">From</div>
-          <div class="orders-dashboard__column orders-dashboard__column--head">To</div>
+    <div class="row">
+      <div class="col-md-2">
+        <router-link class="btn btn-primary w-75" to="/orders/">To orders list</router-link>
+      </div>
+      <div class="col-md-10">
+        <div v-if="this.shipments.length === 0">
+          <h2 class="text-muted">Nothing to deliver</h2>
         </div>
-        <div v-for="shipment of shipments">
-          <ShipmentToDeliver
-              :shipment=shipment
-              :cities=cities
-              @selectedShipment="addToSelectedShipments">
-          </ShipmentToDeliver>
-        </div>
-        <section class="section">
-          <div class="selected-orders">
-            <h3 class="selected-orders__title text-muted" v-if="this.chosenShipments.length > 0">You are
-              dispatching</h3>
-            <h3 class="selected-orders__title text-muted" v-else>Nothing selected</h3>
-            <template v-for="item in this.chosenShipments">
-              <div class="selected-orders-order">
+        <div v-else>
+          <section class="section">
+            <div class="orders-dashboard">
+              <span class="orders-dashboard__title">Boxes to deliver</span>
+              <div class="orders-dashboard__row orders-dashboard__row--header">
+                <div class="orders-dashboard__column orders-dashboard__column--head">Shipments</div>
+                <div class="orders-dashboard__column orders-dashboard__column--head">From</div>
+                <div class="orders-dashboard__column orders-dashboard__column--head">To</div>
+              </div>
+              <div v-for="shipment of shipments">
+                <ShipmentToDeliver
+                    :shipment=shipment
+                    :cities=cities
+                    @selectedShipment="addToSelectedShipments">
+                </ShipmentToDeliver>
+              </div>
+              <section class="section">
+                <div class="selected-orders">
+                  <h3 class="selected-orders__title text-muted" v-if="this.chosenShipments.length > 0">You are
+                    dispatching</h3>
+                  <h3 class="selected-orders__title text-muted" v-else>Nothing selected</h3>
+                  <template v-for="item in this.chosenShipments">
+                    <div class="selected-orders-order">
                 <span>
                 <span class="fw-bold ">{{ item.shipment.name }}  </span> from
                 <span class="fw-bold "> {{ item.city_from.city }}  </span> to
                 <span class="fw-bold "> {{ item.city_to.city }} </span>
                   </span>
-              </div>
-            </template>
-          </div>
-        </section>
-
-        <section class="section">
-          <div class="road-info">
-            <div class="available-trucks">
-              <span class="available-trucks__title">Available trucks</span>
-              <div v-if="this.isTrucksAvailable">
-<!--                <div v-for="truck  of this.trucks">-->
-                  <OrderTruck
-                      :trucks=this.trucks
-                      @selectedTruck="addToOrderTruck"/>
-<!--                </div>-->
-              </div>
-            </div>
-            <div class="available-drivers">
-              <span class="available-drivers__title">Available drivers</span>
-              <div v-if="this.isDriversAvailable">
-                <div v-for="driver of this.drivers">
-                  <OrderDriver
-                      :driver=driver
-                      @selectedDriver="addToOrderDrivers(driver)"
-                  />
+                    </div>
+                  </template>
                 </div>
-              </div>
-            </div>
-          </div>
-          <hr class="section__hr">
-        </section>
+              </section>
 
-        <BaseButton
-            :button="{
+              <section class="section">
+                <div class="road-info">
+                  <div class="available-trucks">
+                    <span class="available-trucks__title">Available trucks</span>
+                    <div v-if="this.isTrucksAvailable">
+                      <!--                <div v-for="truck  of this.trucks">-->
+                      <OrderTruck
+                          :trucks=this.trucks
+                          @selectedTruck="addToOrderTruck"/>
+                      <!--                </div>-->
+                    </div>
+                  </div>
+                  <div class="available-drivers">
+                    <span class="available-drivers__title">Available drivers</span>
+                    <div v-if="this.isDriversAvailable">
+                      <div v-for="driver of this.drivers">
+                        <OrderDriver
+                            :driver=driver
+                            @selectedDriver="addToOrderDrivers(driver)"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <hr class="section__hr">
+              </section>
+
+              <BaseButton
+                  :button="{
                 name: 'Create order',
                 class: 'orders__btn w-25 btn btn-primary'
                   }"
-            v-on:callback="createOrder(this.transportOrder)"/>
+                  v-on:callback="createOrder(this.transportOrder)"/>
+            </div>
+          </section>
+        </div>
       </div>
-    </section>
+    </div>
   </div>
 </template>
 
@@ -125,7 +137,7 @@ export default {
           let wayPointLoading = {};
           Object.assign(wayPointLoading, {
             shipment: {
-              id : item.shipment.id,
+              id: item.shipment.id,
               name: item.shipment.name,
               weight: item.shipment.weight,
               status: item.shipment.status
@@ -140,7 +152,7 @@ export default {
           let wayPointUnloading = {};
           Object.assign(wayPointUnloading, {
             shipment: {
-              id : item.shipment.id,
+              id: item.shipment.id,
               name: item.shipment.name,
               weight: item.shipment.weight,
               status: item.shipment.status
@@ -156,7 +168,6 @@ export default {
         axios.post("http://localhost:5000/api/orders/preorder", {way_points: wayPoints})
             .then(function (response) {
               self.trucks = response.data.trucks;
-              self.drivers = response.data.drivers;
               self.transportOrder.way_points = wayPoints;
               self.isTrucksAvailable = true;
               self.isDriversAvailable = true;
@@ -182,11 +193,27 @@ export default {
       }
     },
     addToOrderTruck(truck) {
-      console.log(truck.reg_number);
       if (this.transportOrder.truck !== "") {
         this.transportOrder.truck = "";
       } else
         this.transportOrder.truck = truck;
+      this.getDriversForOrderTruck(truck);
+    },
+    getDriversForOrderTruck(truck) {
+      let self = this;
+      self.drivers = [];
+      axios.get("http://localhost:5000/api/drivers/city", {
+        params: {
+          id: truck.city.id,
+        }
+      })
+          .then(function (response) {
+            self.drivers = [];
+            self.drivers = response.data;
+          })
+          .catch(function (error) {
+            useToast().warning(error.response.data.error_description)
+          })
     },
     createOrder(transportOrder) {
       if (this.transportOrder.truck !== ""
@@ -199,8 +226,8 @@ export default {
           way_points: transportOrder.way_points,
         })
             .then(function (response) {
+              self.$router.push("/orders");
               useToast().success("Order № " + response.data.number + " has been created.")
-              self.$router.go("/orders");
             })
             .catch(function (error) {
               if (error.response.data.error_description === "") {
