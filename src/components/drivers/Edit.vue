@@ -13,22 +13,22 @@
     <div class="col-md-10">
       <form>
         <div class="mb-3">
-          <label for="name" class="form-label">Name</label>
+          <label for="name" class="float-start form-label">Name</label>
           <input v-model="name" type="text" class="form-control" id="name">
         </div>
 
         <div class="mb-3">
-          <label for="last_name" class="form-label">Last name</label>
+          <label for="last_name" class="float-start form-label">Last name</label>
           <input v-model="last_name" type="text" class="form-control" id="last_name">
         </div>
 
         <div class="mb-3">
-          <label for="personal_number" class="form-label">Personal number</label>
+          <label for="personal_number" class="float-start form-label">Personal number</label>
           <input v-model="personal_number" type="text" class="form-control" id="personal_number" disabled>
         </div>
 
         <div class="mb-3">
-          <label for="hours_worked" class="form-label">Hours worked</label>
+          <label for="hours_worked" class="float-start form-label">Hours worked</label>
           <input v-model="hours_worked" type="text" class="form-control" id="hours_worked">
         </div>
 

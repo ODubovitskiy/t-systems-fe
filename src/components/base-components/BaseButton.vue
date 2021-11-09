@@ -1,5 +1,5 @@
 <template>
-  <button class="base-button" :class="button.class"
+  <button class=" w-100 base-button" :class="button.class"
           :type="button.type"
           :data-bs-toggle="button.toggle"
           :data-bs-target="button.target"
@@ -22,8 +22,8 @@ export default {
 
 <style scoped>
 
-.base-button {
-  max-width: 100%;
-}
+/*.base-button {*/
+/*  max-width: 100%;*/
+/*}*/
 
 </style>

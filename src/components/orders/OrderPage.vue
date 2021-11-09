@@ -2,13 +2,16 @@
   <div class="orders">
     <div class="row">
       <div class="col-md-2">
-        <router-link class="btn btn-primary w-75" to="/orders/">To orders list</router-link>
+        <router-link class="btn btn-outline-secondary m-2 w-100" to="/orders/">To orders list</router-link>
+        <hr>
+        <BaseButton
+            :button="{
+                name: 'Create order',
+                class: 'orders__btn  btn btn-primary'
+                  }"
+            v-on:callback="createOrder(this.transportOrder)"/>
       </div>
       <div class="col-md-10">
-        <div v-if="this.shipments.length === 0">
-          <h2 class="text-muted">Nothing to deliver</h2>
-        </div>
-        <div v-else>
           <section class="section">
             <div class="orders-dashboard">
               <span class="orders-dashboard__title">Boxes to deliver</span>
@@ -68,15 +71,10 @@
                 <hr class="section__hr">
               </section>
 
-              <BaseButton
-                  :button="{
-                name: 'Create order',
-                class: 'orders__btn w-25 btn btn-primary'
-                  }"
-                  v-on:callback="createOrder(this.transportOrder)"/>
+
+
             </div>
           </section>
-        </div>
       </div>
     </div>
   </div>
@@ -277,4 +275,6 @@ export default {
 }
 </script>
 
-<style scoped lang="scss" src="../../styles/pages/orders.scss"></style>
+<style scoped lang="scss" src="../../styles/pages/orders.scss">
+
+</style>

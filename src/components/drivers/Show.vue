@@ -28,22 +28,31 @@
     </div>
 
     <div class="card col-md-10">
-      <div class="card-header">
-        Detailed information about <strong>{{ driver.name }} {{ driver.last_name }}</strong>
+      <div class="m-2 card-header">
+        <h4 class="m-1">
+          Detailed information about <strong>{{ driver.name }} {{ driver.last_name }}</strong>
+        </h4>
       </div>
+
       <div class="card-body">
         <div class="card-text">
           <div class="modal-body">
             <div class="row mb-5">
               <div class="col-6">
-                <div class="text-muted">Name<strong>: {{ driver.name + " " + driver.last_name }}</strong></div>
-                <div class="text-muted">Personal number:<strong> {{ driver.personal_number }}</strong></div>
-                <div class="text-muted">Status<strong>: {{ driver.status }}</strong></div>
-                <div class="text-muted">Hours worked:<strong> {{ driver.hours_worked }}</strong></div>
-                <div class="text-muted">City<strong>: {{ driver.city.city }}</strong></div>
-                <div class="text-muted">Truck<strong>: {{ driver.truck === null ? "Truck is not stated": driver.truck.model }}</strong></div>
+                <div class="text-start text-muted">Name</div>
+                <div class="text-start text-muted">Personal number</div>
+                <div class="text-start text-muted">Status</div>
+                <div class="text-start text-muted">Hours worked</div>
+                <div class="text-start text-muted">City</div>
+                <div class="text-start text-muted">Truck</div>
               </div>
               <div class="col-6">
+                <div class="text-start text-muted">{{ driver.name }} {{ driver.last_name }}</div>
+                <div class="text-start text-muted">{{ driver.personal_number }}</div>
+                <div class="text-start text-muted">{{ driver.status }}</div>
+                <div class="text-start text-muted">{{ driver.hours_worked }}</div>
+                <div class="text-start text-muted">{{ driver.city.city }}</div>
+                <div class="text-start text-muted">{{ driver.truck === null ? "Truck is not stated": driver.truck.model }}</div>
               </div>
             </div>
           </div>

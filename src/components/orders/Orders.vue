@@ -1,5 +1,4 @@
 <template>
-
   <div class="row">
     <div class="col-md-2">
       <router-link class="btn btn-primary w-75" to="/orders/create">Add order</router-link>
@@ -14,54 +13,75 @@
                       :data-bs-target="'#collapse-' + order.id"
                       aria-expanded="true" :aria-controls="'collapse-' + order.id">
                 Transport order № {{ order.number }}
-                <span style="float: right">{{ order.status }}</span>
+                 <span class="text-end"> ({{ order.status }}) </span>
               </button>
             </h2>
             <div :id="'collapse-' + order.id" class="accordion-collapse collapse"
                  :aria-labelledby="'headingOne-' + order.id"
                  data-bs-parent="#accordionOrders">
               <div class="accordion-body">
-                <table>
+                <table class="w-100">
                   <tr>
                     <td>
-                      <div><strong>Truck</strong> :</div>
+                      <h5 class="text-muted">Drivers</h5>
                     </td>
                     <td>
-                      <div><strong>Drivers</strong> :</div>
+                      <h5 class="text-muted">Truck</h5>
                     </td>
                   </tr>
                   <tr>
-                    <td>
-                      <div><strong>Status:</strong> {{ order.status }}</div>
-                      <div><strong>Truck:</strong> {{ order.truck.model }} ( reg.number: {{ order.truck.reg_number }})
+                    <td class="align-top">
+                      <div v-for="driver of order.drivers">
+                        <div class="text-start">
+                          <strong>
+                            {{ driver.status === "DRIVING" ? 'Driver' : 'Co-driver' }} :
+                          </strong>
+                          <span>{{ driver.name }} {{ driver.last_name }} ( p/n: {{ driver.personal_number }})</span>
+                        </div>
                       </div>
-                      <div><strong>Load capacity:</strong>{{ order.truck.load_capacity }}</div>
-                      <div><strong>Average speed: </strong>{{ order.truck.average_speed }}</div>
                     </td>
                     <td>
-                      <div v-for="driver of order.drivers">
-                        <strong>
-                          {{ driver.status === "DRIVING" ? 'Driver' : 'Co-driver' }} :
-                        </strong>
-                        <span>{{ driver.name }} {{ driver.last_name }} ( p/n: {{ driver.personal_number }})</span>
+                      <div class="text-start">
+                       <span>
+                          <strong>Truck:</strong> {{ order.truck.model }} ( reg.number: {{ order.truck.reg_number }})
+                        </span>
+                      </div>
+                      <div class="text-start">
+                        <span>
+                          <strong>Load capacity:</strong>{{ order.truck.load_capacity }}
+                        </span>
+                      </div>
+                      <div class="text-start">
+                        <span>
+                          <strong>Average speed: </strong>{{ order.truck.average_speed }}
+                        </span>
                       </div>
                     </td>
                   </tr>
                 </table>
                 <hr>
-                <div v-for="waypoint of order.way_points" class="way-points">
-                  <div class="shipment">
-                    <strong> {{ waypoint.shipment.name }} </strong>
-                    <div v-if="waypoint.type ==='LOADING'">
-                      <span> <strong> From: </strong>{{ waypoint.city.city }}</span>
-                      Type: {{ waypoint.type }}
-                    </div>
-                    <div v-else>
-                      <span>  <strong> To: </strong>{{ waypoint.city.city }}</span>
-                      Type: {{ waypoint.type }}
-                    </div>
-                  </div>
-                </div>
+                <table class="w-100 table table-hover">
+                  <thead>
+                  <tr class="text-center">
+                    <th>Shipment name</th>
+                    <th>From (Loading)</th>
+                    <th>To (Unloading)</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr v-for="waypoint of order.way_points" class="way-points">
+                    <td>
+                      <span>{{ waypoint.shipment.name }}</span>
+                    </td>
+                    <td>
+                      <span v-if="waypoint.type ==='LOADING'"> {{ waypoint.city.city }} </span>
+                    </td>
+                    <td>
+                      <span v-if="waypoint.type ==='UNLOADING'"> {{ waypoint.city.city }}</span>
+                    </td>
+                  </tr>
+                  </tbody>
+                </table>
               </div>
             </div>
           </div>

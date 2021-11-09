@@ -27,33 +27,28 @@
       />
     </div>
     <div class="card col-md-10">
-      <div class="card-header">
-        Detailed information about <strong>{{ truck.model }} {{ truck.registration_number }}</strong>
-
+      <div class="m-2 card-header">
+        <h4 class="m-1">Detailed information about <strong>{{ truck.model }} ({{ truck.reg_number }})</strong></h4>
       </div>
       <div class="card-body">
         <div class="card-text">
           <div class="modal-body">
             <div class="row mb-5">
               <div class="col-6">
-                <div class="text-muted">Truck model</div>
-                <div class="text-muted">Registration number</div>
-                <div class="text-muted">Driver shift</div>
-                <div class="text-muted">City</div>
-                <div class="text-muted">Capacity</div>
-                <div class="text-muted">Status</div>
+                <div class="text-start text-muted">Truck model</div>
+                <div class="text-start text-muted">Registration number</div>
+                <div class="text-start text-muted">Driver shift</div>
+                <div class="text-start text-muted">City</div>
+                <div class="text-start text-muted">Capacity</div>
+                <div class="text-start text-muted">Status</div>
               </div>
               <div class="col-6">
-                <div class="text-muted">{{ truck.model }}</div>
-                <div class="text-muted">{{ truck.reg_number }}</div>
-                <div class="text-muted">{{ truck.driver_shift }}</div>
-                <div class="text-muted">{{ truck.city.city }}</div>
-                <div class="text-muted">{{ truck.load_capacity }}</div>
-                <div class="text-muted">{{ truck.status }}</div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="pt-5 modal-footer">
+                <div class="text-start text-muted">{{ truck.model }}</div>
+                <div class="text-start text-muted">{{ truck.reg_number }}</div>
+                <div class="text-start text-muted">{{ truck.driver_shift }}</div>
+                <div class="text-start text-muted">{{ truck.city.city }}</div>
+                <div class="text-start text-muted">{{ truck.load_capacity }}</div>
+                <div class="text-start text-muted">{{ truck.status }}</div>
               </div>
             </div>
           </div>
