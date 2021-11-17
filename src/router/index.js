@@ -9,8 +9,13 @@ import DriversPage from "@/components/drivers/DriversPage";
 import DriverPA from "@/components/DriverPA";
 import OrderPage from "@/components/orders/OrderPage";
 import Orders from "@/components/orders/Orders";
+import AuthForm from "@/components/AuthForm";
 
 const routes = [
+    {
+        path: '/auth',
+        component: AuthForm
+    },
     {
         path: '/',
         component: Home

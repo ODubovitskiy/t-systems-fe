@@ -15,7 +15,9 @@ const actionTypes = {
     DELETE_DRIVER: "deleteDriver",
     GET_DRIVER_STATUSES: "getDriverStatuses",
 
-    GET_PRE_ORDER : "getPreOrder",
+    GET_PRE_ORDER: "getPreOrder",
+    LOGIN: "login",
+    LOGOUT: "logout",
 }
 
 window.actionTypes = actionTypes;

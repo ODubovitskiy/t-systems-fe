@@ -12,69 +12,64 @@
             v-on:callback="createOrder(this.transportOrder)"/>
       </div>
       <div class="col-md-10">
-          <section class="section">
-            <div class="orders-dashboard">
-              <span class="orders-dashboard__title">Boxes to deliver</span>
-              <div class="orders-dashboard__row orders-dashboard__row--header">
-                <div class="orders-dashboard__column orders-dashboard__column--head">Shipments</div>
-                <div class="orders-dashboard__column orders-dashboard__column--head">From</div>
-                <div class="orders-dashboard__column orders-dashboard__column--head">To</div>
-              </div>
-              <div v-for="shipment of shipments">
-                <ShipmentToDeliver
-                    :shipment=shipment
-                    :cities=cities
-                    @selectedShipment="addToSelectedShipments">
-                </ShipmentToDeliver>
-              </div>
-              <section class="section">
-                <div class="selected-orders">
-                  <h3 class="selected-orders__title text-muted" v-if="this.chosenShipments.length > 0">You are
-                    dispatching</h3>
-                  <h3 class="selected-orders__title text-muted" v-else>Nothing selected</h3>
-                  <template v-for="item in this.chosenShipments">
-                    <div class="selected-orders-order">
+        <section class="section">
+          <div class="orders-dashboard">
+            <span class="orders-dashboard__title">Boxes to deliver</span>
+            <div class="orders-dashboard__row orders-dashboard__row--header">
+              <div class="orders-dashboard__column orders-dashboard__column--head">Shipments</div>
+              <div class="orders-dashboard__column orders-dashboard__column--head">From</div>
+              <div class="orders-dashboard__column orders-dashboard__column--head">To</div>
+            </div>
+            <div v-for="shipment of shipments">
+              <ShipmentToDeliver
+                  :shipment=shipment
+                  :cities=cities
+                  @selectedShipment="addToSelectedShipments">
+              </ShipmentToDeliver>
+            </div>
+            <section class="section">
+              <div class="selected-orders">
+                <h3 class="selected-orders__title text-muted" v-if="this.chosenShipments.length > 0">You are
+                  dispatching</h3>
+                <h3 class="selected-orders__title text-muted" v-else>Nothing selected</h3>
+                <template v-for="item in this.chosenShipments">
+                  <div class="selected-orders-order">
                 <span>
                 <span class="fw-bold ">{{ item.shipment.name }}  </span> from
                 <span class="fw-bold "> {{ item.city_from.city }}  </span> to
                 <span class="fw-bold "> {{ item.city_to.city }} </span>
                   </span>
-                    </div>
-                  </template>
-                </div>
-              </section>
-
-              <section class="section">
-                <div class="road-info">
-                  <div class="available-trucks">
-                    <span class="available-trucks__title">Available trucks</span>
-                    <div v-if="this.isTrucksAvailable">
-                      <!--                <div v-for="truck  of this.trucks">-->
-                      <OrderTruck
-                          :trucks=this.trucks
-                          @selectedTruck="addToOrderTruck"/>
-                      <!--                </div>-->
-                    </div>
                   </div>
-                  <div class="available-drivers">
-                    <span class="available-drivers__title">Available drivers</span>
-                    <div v-if="this.isDriversAvailable">
-                      <div v-for="driver of this.drivers">
-                        <OrderDriver
-                            :driver=driver
-                            @selectedDriver="addToOrderDrivers(driver)"
-                        />
-                      </div>
+                </template>
+              </div>
+            </section>
+
+            <section class="section">
+              <div class="road-info">
+                <div class="available-trucks">
+                  <span class="available-trucks__title">Available trucks</span>
+                  <div v-if="this.isTrucksAvailable">
+                    <OrderTruck
+                        :trucks=this.trucks
+                        @selectedTruck="addToOrderTruck"/>
+                  </div>
+                </div>
+                <div class="available-drivers">
+                  <span class="available-drivers__title">Available drivers</span>
+                  <div v-if="this.isDriversAvailable">
+                    <div v-for="driver of this.drivers">
+                      <OrderDriver
+                          :driver=driver
+                          @selectedDriver="addToOrderDrivers(driver)"
+                      />
                     </div>
                   </div>
                 </div>
-                <hr class="section__hr">
-              </section>
-
-
-
-            </div>
-          </section>
+              </div>
+              <hr class="section__hr">
+            </section>
+          </div>
+        </section>
       </div>
     </div>
   </div>
@@ -89,6 +84,27 @@ import OrderTruck from "@/components/orders/OrderTruck";
 import axios from "axios";
 import {useToast} from "vue-toastification";
 
+const $axios = axios.create({
+  headers: {'Authorization': localStorage.getItem("dataToken")}
+});
+
+$axios.interceptors.response.use((response) => {
+  return response;
+}, function (error) {
+  if ((error.response.status === 401)) {
+    window.location.href = '/auth';
+    if (localStorage.removeItem("dataToken") && localStorage.removeItem("currentUser")) {
+      localStorage.removeItem("dataToken");
+      localStorage.removeItem("currentUser");
+    }
+    return Promise.reject('cancel');
+  }
+  if (axios.isCancel(error)) {
+    return Promise.reject('cancel');
+  }
+});
+
+
 export default {
   name: "OrderPage",
   components: {ShipmentToDeliver, BaseButton, OrderDriver, OrderTruck},
@@ -99,7 +115,7 @@ export default {
   methods: {
     getShipments() {
       let self = this;
-      axios.get("http://localhost:5000/api/shipments-prepared/")
+      $axios.get("http://localhost:5000/api/shipments-prepared/")
           .then(function (response) {
             self.shipments = response.data;
           });
@@ -107,7 +123,7 @@ export default {
     },
     getCities() {
       let self = this;
-      return axios({
+      return $axios({
         method: "get",
         url: "http://localhost:5000/api/cities",
       }).then(function (response) {
@@ -163,7 +179,7 @@ export default {
           wayPoints.push(wayPointUnloading);
         }
         let self = this;
-        axios.post("http://localhost:5000/api/orders/preorder", {way_points: wayPoints})
+        $axios.post("http://localhost:5000/api/orders/preorder", {way_points: wayPoints})
             .then(function (response) {
               self.trucks = response.data.trucks;
               self.transportOrder.way_points = wayPoints;
@@ -200,7 +216,7 @@ export default {
     getDriversForOrderTruck(truck) {
       let self = this;
       self.drivers = [];
-      axios.get("http://localhost:5000/api/drivers/city", {
+      $axios.get("http://localhost:5000/api/drivers/city", {
         params: {
           id: truck.city.id,
         }
@@ -218,7 +234,7 @@ export default {
           && this.transportOrder.way_points.length !== 0
           && this.transportOrder.drivers.length !== 0) {
         let self = this;
-        axios.post("http://localhost:5000/api/orders", {
+        $axios.post("http://localhost:5000/api/orders", {
           truck: transportOrder.truck,
           drivers: transportOrder.drivers,
           way_points: transportOrder.way_points,

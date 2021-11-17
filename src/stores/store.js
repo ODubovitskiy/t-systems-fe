@@ -1,10 +1,36 @@
 import {createStore} from 'vuex'
-import axios from "axios";
+
 import {actionTypes} from "@/stores/actionTypes"
 import {useToast} from 'vue-toastification'
+import axios from 'axios';
+
+const $axios = axios.create({
+    headers: {'Authorization': localStorage.getItem("dataToken")}
+});
+
+$axios.interceptors.response.use((response) => {
+    return response;
+}, function (error) {
+    if ((error.response.status === 401)) {
+        window.location.href = '/auth';
+        if (localStorage.removeItem("dataToken") && localStorage.removeItem("currentUser")) {
+            localStorage.removeItem("dataToken");
+            localStorage.removeItem("currentUser");
+        }
+        return Promise.reject('cancel');
+    }
+});
+
 
 export default createStore({
     state: {
+        auth: {
+            form: {
+                email: "",
+                password: "",
+            },
+            dataToken: "",
+        },
         currentPage: '/',
         trucksTab: {
             modals: {
@@ -112,7 +138,7 @@ export default createStore({
             transportOrder: {},
         },
     },
-    
+
     mutations: {
         updateCities(state, payload) {
             state.trucksTab.cities = payload;
@@ -238,12 +264,24 @@ export default createStore({
         deleteDriver(state, payload) {
             state.driverTab.driverDelete.id = payload;
         },
+
+        setDataToken(state, payload) {
+            state.auth.dataToken = payload;
+        },
+        updateEmail(state, payload) {
+            state.auth.form.email = payload;
+        },
+        updatePassword(state, payload) {
+            state.auth.form.password = payload;
+        },
     },
 
     actions: {
         [actionTypes.SUBMIT_FORM_ADD_TRUCK]({commit, state}) {
             let formData = state.trucksTab.modals.truck_add.form;
-            return axios.post("http://localhost:5000/api/trucks", formData)
+
+
+            return $axios.post("http://localhost:5000/api/trucks", formData)
                 .then(function (response) {
                     useToast().success("You have successfully stored truck in database", {})
                 })
@@ -252,16 +290,18 @@ export default createStore({
                 });
         },
         [actionTypes.GET_CITIES]({commit, state}) {
-            return axios({
+            return $axios({
                 method: "get",
                 url: "http://localhost:5000/api/cities",
             }).then(function (response) {
                 let cities = response.data;
                 commit("updateCities", cities)
+            }).catch(function (error) {
+                useToast().warning(error.response.data.error_description, {})
             });
         },
         [actionTypes.GET_TRUCK_STATUSES]({commit, state}) {
-            return axios({
+            return $axios({
                 method: "get",
                 url: "http://localhost:5000/api/truck-status",
             }).then(function (response) {
@@ -270,7 +310,7 @@ export default createStore({
             });
         },
         [actionTypes.GET_TRUCKS]({commit, state}) {
-            return axios({
+            return $axios({
                 method: "get",
                 url: "http://localhost:5000/api/trucks",
             }).then(function (response) {
@@ -280,7 +320,7 @@ export default createStore({
         },
         [actionTypes.GET_TRUCK_BY_ID]({commit, state}) {
             let id = state.trucksTab.truckShow.truckId;
-            return axios({
+            return $axios({
                 method: "get",
                 url: "http://localhost:5000/api/trucks/" + id,
             }).then(function (response) {
@@ -291,7 +331,7 @@ export default createStore({
         }, [actionTypes.UPDATE_TRUCK]({commit, state}) {
             let formData = state.trucksTab.truckEdit.truck;
             let id = state.trucksTab.truckEdit.truckId;
-            return axios.put("http://localhost:5000/api/trucks/" + id, formData)
+            return $axios.put("http://localhost:5000/api/trucks/" + id, formData)
                 .then(function (response) {
                     useToast().success("Truck has been successfully updated", {})
                 }).catch(function (error) {
@@ -299,7 +339,7 @@ export default createStore({
                 });
         }, [actionTypes.DELETE_TRUCK]({commit, state}) {
             let id = state.trucksTab.truckDelete.id;
-            return axios.delete("http://localhost:5000/api/trucks/" + id)
+            return $axios.delete("http://localhost:5000/api/trucks/" + id)
                 .then(function (response) {
                     useToast().success("Truck has been successfully deleted", {})
                 })
@@ -310,14 +350,17 @@ export default createStore({
 
         // Drivers
         [actionTypes.GET_DRIVERS]({commit, state}) {
-            return axios.get("http://localhost:5000/api/drivers/")
+            return $axios({
+                method: 'get',
+                url: "http://localhost:5000/api/drivers/",
+            })
                 .then(function (response) {
                     let drivers = response.data;
                     commit("updateDriversTable", drivers)
                 });
         },
         [actionTypes.GET_AVAILABLE_TRUCKS]({commit, state}) {
-            return axios.get("http://localhost:5000/api/trucks/available")
+            return $axios.get("http://localhost:5000/api/trucks/available")
                 .then(function (response) {
                     let trucks = response.data;
                     commit("updateTrucksAvailable", trucks)
@@ -325,7 +368,7 @@ export default createStore({
         },
         [actionTypes.SUBMIT_FORM_ADD_DRIVER]({commit, state}) {
             let formData = state.driverTab.forms.addDriver;
-            return axios.post("http://localhost:5000/api/drivers", formData)
+            return $axios.post("http://localhost:5000/api/drivers", formData)
                 .then(function (response) {
                     useToast().success(response.data + " has been stored in database", {})
                 })
@@ -334,7 +377,7 @@ export default createStore({
                 });
         }, [actionTypes.GET_DRIVER_BY_ID]({commit, state}) {
             let id = state.driverTab.driverShow.id;
-            return axios({
+            return $axios({
                 method: "get",
                 url: "http://localhost:5000/api/drivers/" + id,
             }).then(function (response) {
@@ -351,35 +394,64 @@ export default createStore({
         }, [actionTypes.UPDATE_DRIVER]({commit, state}) {
             let formData = state.driverTab.forms.driverEdit.form;
             let id = state.driverTab.forms.driverEdit.id;
-            return axios.put("http://localhost:5000/api/drivers/" + id, formData)
+            return $axios.put("http://localhost:5000/api/drivers/" + id, formData)
                 .then(function (response) {
                 });
         }, [actionTypes.GET_DRIVER_STATUSES]({commit, state}) {
-            return axios.get("http://localhost:5000/api/driver-statuses/")
+            return $axios.get("http://localhost:5000/api/driver-statuses/")
                 .then(function (response) {
                     commit("updateDriverStatusesToEdit", response.data)
                 });
         }, [actionTypes.DELETE_DRIVER]({commit, state}) {
             let id = state.driverTab.driverDelete.id;
-            return axios.delete("http://localhost:5000/api/drivers/" + id)
+            return $axios.delete("http://localhost:5000/api/drivers/" + id)
                 .then(function (response) {
                     useToast().success("Driver has been successfully removed from database", {})
                 })
                 .catch(function (error) {
-                    useToast().warning(error.response.data.error_description, {})
+                    useToast().warning(error.response.data.error_description)
                 });
         },
 
         // Orders
         [actionTypes.GET_PRE_ORDER]({commit, state}) {
-            return axios.get("http://localhost:5000/api/orders/preorder")
+            return $axios.get("http://localhost:5000/api/orders/preorder")
                 .then(function (response) {
                     let preOrder = response.data;
-                    console.log(response.data);
                 });
         },
+
+        //Auth
+        [actionTypes.LOGIN]({commit, state}) {
+            let form = state.auth.form
+            axios.post("http://localhost:5000/api/auth/login", form)
+                .then(function (response) {
+                    localStorage.setItem("dataToken", response.data.token);
+                    localStorage.setItem("currentUser", response.data.currentUser);
+                    axios.defaults.headers.common['Authorization'] = localStorage.getItem("dataToken");
+                    axios.defaults.withCredentials = true;
+                    window.location.href = "/";
+                })
+                .catch(function (error) {
+                    useToast().warning(error.response.data.error_description)
+                })
+        },
+        [actionTypes.LOGOUT]({commit, state}) {
+            let self = this;
+            return $axios.post("http://localhost:5000/api/auth/logout")
+                .then(function (response) {
+                    axios.defaults.headers.common['Authorization'] = "";
+                    localStorage.removeItem("dataToken");
+                    localStorage.removeItem("currentUser");
+                    window.location.href = "/";
+                })
+                .catch(function (error) {
+                    useToast().warning(error.response.data.error_description)
+                })
+        }
     },
 
     modules: {},
+
     strict: process.env.NODE_ENV !== 'production',
 });

@@ -38,13 +38,31 @@
 import axios from "axios";
 import {useToast} from "vue-toastification";
 
+const $axios = axios.create({
+  headers: {'Authorization': localStorage.getItem("dataToken")}
+});
+
+$axios.interceptors.response.use((response) => {
+  return response;
+}, function (error) {
+  if (error.response.status === 401) {
+    window.location.href = '/auth';
+    if (localStorage.removeItem("dataToken") && localStorage.removeItem("currentUser")) {
+      localStorage.removeItem("dataToken");
+      localStorage.removeItem("currentUser");
+    }
+    return Promise.reject('cancel');
+  }
+});
+
+
 export default {
   name: "DriverPA",
   beforeMount() {
     let self = this;
     let personalNumber = "111111";
     let url = "http://localhost:5000/api/drivers/personal-account/" + personalNumber
-    return axios.get(url)
+    return $axios.get(url)
         .then(function (response) {
           if (response.data.driver)
             self.driver = response.data.driver;
@@ -56,18 +74,18 @@ export default {
   },
   data() {
     return {
-      driver:{
-        personal_number:"",
-        name:"",
-        last_name:"",
-        truck:{
-          model:"",
-          reg_number:"",
+      driver: {
+        personal_number: "",
+        name: "",
+        last_name: "",
+        truck: {
+          model: "",
+          reg_number: "",
         }
       },
       transport_order: {
-        number:"",
-        drivers:{},
+        number: "",
+        drivers: {},
       },
     }
   },

@@ -28,13 +28,6 @@ export default {
     }
   },
   methods: {},
-  mounted() {
-
-  },
-
-  data() {
-    return {}
-  }
 }
 </script>
 
