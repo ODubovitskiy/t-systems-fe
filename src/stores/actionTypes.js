@@ -16,6 +16,8 @@ const actionTypes = {
     GET_DRIVER_STATUSES: "getDriverStatuses",
 
     GET_PRE_ORDER: "getPreOrder",
+    GET_ORDER_BY_ID: "getOrderById",
+
     LOGIN: "login",
     LOGOUT: "logout",
 }

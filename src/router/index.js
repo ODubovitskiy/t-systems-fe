@@ -9,6 +9,7 @@ import DriversPage from "@/components/drivers/DriversPage";
 import DriverPA from "@/components/DriverPA";
 import OrderPage from "@/components/orders/OrderPage";
 import Orders from "@/components/orders/Orders";
+import EditPage from "@/components/orders/EditPage";
 import AuthForm from "@/components/AuthForm";
 
 const routes = [
@@ -56,6 +57,10 @@ const routes = [
     {
         path: '/drivers/personal-account/',
         component: DriverPA
+    },
+    {
+        path: '/orders/:id/edit',
+        component: EditPage
     },
 ]
 

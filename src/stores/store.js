@@ -437,7 +437,6 @@ export default createStore({
                 })
         },
         [actionTypes.LOGOUT]({commit, state}) {
-            let self = this;
             return $axios.post("http://localhost:5000/api/auth/logout")
                 .then(function (response) {
                     axios.defaults.headers.common['Authorization'] = "";

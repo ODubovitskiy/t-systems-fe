@@ -29,6 +29,14 @@
           </tbody>
         </table>
       </div>
+      <div>
+        <BaseRouterLink
+            :link="{
+                      class : 'btn btn-outline-info  m-2',
+                      path: '/orders/'+ this.transport_order.id + '/edit',
+                      name: 'Manage order'}"
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -37,6 +45,7 @@
 
 import axios from "axios";
 import {useToast} from "vue-toastification";
+import BaseRouterLink from "@/components/base-components/BaseRouterLink";
 
 const $axios = axios.create({
   headers: {'Authorization': localStorage.getItem("dataToken")}
@@ -58,10 +67,11 @@ $axios.interceptors.response.use((response) => {
 
 export default {
   name: "DriverPA",
+  components: {BaseRouterLink},
   beforeMount() {
     let self = this;
-    let personalNumber = "111111";
-    let url = "http://localhost:5000/api/drivers/personal-account/" + personalNumber
+    let personalNumber = localStorage.getItem("currentUser").personal_number;
+    let url = "http://localhost:5000/api/drivers/personal-account/" + personalNumber;
     return $axios.get(url)
         .then(function (response) {
           if (response.data.driver)
