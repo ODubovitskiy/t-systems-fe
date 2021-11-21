@@ -17,17 +17,6 @@
               <label for="last_name" class="form-label">Last name</label>
               <input v-model="last_name" type="text" class="form-control" id="last_name">
             </div>
-
-            <div class="form-group mb-3">
-              <label for="truck" class="form-label float-start">Truck</label>
-              <select v-model="truck" name="truck" class="form-control" id="truck">
-                <option value="" disabled selected>Select truck</option>
-                <template v-for="truck in truckAvailable">
-                  <option :value=truck.id>{{ truck.model + " " + truck.reg_number }}</option>
-                </template>
-              </select>
-            </div>
-
             <div class="form-group mb-3">
               <label for="city" class="form-label float-start">City</label>
               <select v-model="city" name="truck" class="form-control" id="city">

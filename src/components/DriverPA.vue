@@ -51,18 +51,21 @@ const $axios = axios.create({
   headers: {'Authorization': localStorage.getItem("dataToken")}
 });
 
-$axios.interceptors.response.use((response) => {
-  return response;
-}, function (error) {
-  if (error.response.status === 401) {
-    window.location.href = '/auth';
-    if (localStorage.removeItem("dataToken") && localStorage.removeItem("currentUser")) {
-      localStorage.removeItem("dataToken");
-      localStorage.removeItem("currentUser");
-    }
-    return Promise.reject('cancel');
-  }
-});
+$axios.interceptors.response.use(
+    (response) => {
+      return response
+    },
+    (error) => {
+      if (error.response && error.response.status === 401) {
+        window.location.href = '/auth';
+        if (localStorage.removeItem("dataToken") && localStorage.removeItem("currentUser")) {
+          localStorage.removeItem("dataToken");
+          localStorage.removeItem("currentUser");
+        }
+      }
+      return Promise.reject(error)
+    },
+);
 
 
 export default {
