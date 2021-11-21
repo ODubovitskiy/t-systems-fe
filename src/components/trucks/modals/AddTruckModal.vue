@@ -13,6 +13,7 @@
               <label for="model" class="form-label float-start">Truck model</label>
               <input v-model="model" type="text" name="model" class="form-control" id="model"
                      placeholder="Type model">
+              <div v-if="v$.model.$invalid" class="text-danger">Model is required</div>
             </div>
 
             <div class="form-group mb-3">
@@ -20,18 +21,31 @@
               <input v-model="reg_number" type="text" name="reg_number" class="form-control"
                      id="reg-number"
                      placeholder="Registration number">
+              <div v-if="v$.reg_number.$invalid" class="text-danger">Registration number is required</div>
             </div>
 
             <div class="form-group mb-3">
               <label for="driver-shift" class="form-label float-start">Driver shift</label>
-              <input v-model="driver_shift" type="text" name="driver_shift" class="form-control" id="driver-shift"
-                     placeholder="Driver shift">
+              <select v-model="driver_shift" class="form-control" name="driver_shift" id="driver-shift">
+                <option value="" disabled selected> Select driver shift</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+              </select>
+              <div v-if="v$.driver_shift.$invalid" class="text-danger">Driver shift is required</div>
+
             </div>
 
             <div class="form-group mb-3">
               <label for="load-capacity" class="form-label float-start">Load capacity</label>
-              <input v-model="load_capacity" type="text" name="load_capacity" class="form-control" id="load-capacity"
-                     placeholder="Load capacity">
+              <select id="load-capacity" v-model="load_capacity" class="form-control" name="load_capacity">
+                <option value="" selected disabled>Select load capacity</option>
+                <option value="10000">10 000</option>
+                <option value="20000">20 000</option>
+                <option value="30000">30 000</option>
+                <option value="40000">40 000</option>
+                <option value="50000">50 000</option>
+              </select>
+              <div v-if="v$.load_capacity.$invalid" class="text-danger">Load capacity is required</div>
             </div>
 
             <div class="form-group mb-3">
@@ -42,8 +56,9 @@
                   <option :value=city.id>{{ city.city }}</option>
                 </template>
               </select>
+              <div v-if="v$.city.$invalid" class="text-danger">City is required</div>
             </div>
-            <!--      Button-->
+
             <div class="modal-footer float-end m-2">
               <BaseButton
                   v-on:callback="submitForm()"
@@ -71,9 +86,24 @@
 <script>
 
 import BaseButton from "@/components/base-components/BaseButton";
+import useVuelidate from '@vuelidate/core'
+import {alphaNum, between, integer, maxLength, minLength, required} from "@vuelidate/validators";
 
 export default {
   name: "AddTruckModal",
+  setup() {
+    return {v$: useVuelidate()}
+  },
+  validations() {
+    return {
+      model: {required, alphaNum},
+      reg_number: {required, alphaNum,   minLengthValue: minLength(7), maxLengthValue: maxLength(7),},
+      driver_shift: {required, integer, between: between(1, 2)},
+      load_capacity: {required, integer, between: between(10000, 50000)},
+      city: {required},
+
+    }
+  },
   components: {
     BaseButton
   }, methods: {
@@ -147,8 +177,6 @@ export default {
       }
     },
   },
-  mounted() {
-  }
 }
 
 </script>

@@ -283,7 +283,6 @@ export default createStore({
         [actionTypes.SUBMIT_FORM_ADD_TRUCK]({commit, state}) {
             let formData = state.trucksTab.modals.truck_add.form;
 
-
             return $axios.post("http://localhost:5000/api/trucks", formData)
                 .then(function (response) {
                     useToast().success("You have successfully stored truck in database", {})
@@ -373,7 +372,7 @@ export default createStore({
             let formData = state.driverTab.forms.addDriver;
             return $axios.post("http://localhost:5000/api/drivers", formData)
                 .then(function (response) {
-                    useToast().success(response.data + " has been stored in database", {})
+                    useToast().success(response.data.name + " " + response.data.last_name + " has been stored in database", {})
                 })
                 .catch(function (error) {
                     useToast().warning(error.response.data.error_description, {})

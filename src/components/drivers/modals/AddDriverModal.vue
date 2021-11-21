@@ -12,10 +12,12 @@
             <div class="mb-3">
               <label for="name" class="form-label">Name</label>
               <input v-model="name" type="text" class="form-control" id="name" aria-describedby="emailHelp">
+              <div v-if="v$.name.$invalid" class="text-danger">Name is required</div>
             </div>
             <div class="mb-3">
               <label for="last_name" class="form-label">Last name</label>
               <input v-model="last_name" type="text" class="form-control" id="last_name">
+              <div v-if="v$.last_name.$invalid" class="text-danger">Lastname is required</div>
             </div>
             <div class="form-group mb-3">
               <label for="city" class="form-label float-start">City</label>
@@ -25,6 +27,7 @@
                   <option :value=city.id>{{ city.city }}</option>
                 </template>
               </select>
+              <div v-if="v$.city.$invalid" class="text-danger">Lastname is required</div>
             </div>
 
             <div class="modal-footer float-end m-2">
@@ -53,18 +56,36 @@
 <script>
 
 import BaseButton from "@/components/base-components/BaseButton";
+import useVuelidate from '@vuelidate/core'
+import {alpha, minLength, required} from "@vuelidate/validators";
 
 export default {
   name: "AddDriverModal",
   components: {
     BaseButton
-  }, methods: {
+  },
+  setup() {
+    return {v$: useVuelidate()}
+  },
+  validations() {
+    return {
+      name: {required, alpha, minLength: minLength(2)},
+      last_name: {required, alpha, minLength: minLength(2)},
+      city: {required},
+    }
+  },
+  methods: {
     submitForm() {
-      this.$store.dispatch(actionTypes.SUBMIT_FORM_ADD_DRIVER);
-      this.$router.go("/drivers");
+      if (this.formIsValid) {
+        this.$store.dispatch(actionTypes.SUBMIT_FORM_ADD_DRIVER);
+        this.$router.go("/drivers");
+      }
     }
   },
   computed: {
+    formIsValid() {
+      return !this.v$.name.$invalid && !this.v$.last_name.$invalid && !this.v$.city.$invalid
+    },
     mainStore: {
       get() {
         return this.$store.state.driverTab;
@@ -74,7 +95,8 @@ export default {
       get() {
         return this.mainStore.forms.truckAvailable;
       }
-    }, cities: {
+    },
+    cities: {
       get() {
         return this.mainStore.cities;
       }
@@ -110,9 +132,6 @@ export default {
       set(value) {
         this.$store.commit("updateAddDriverCity", value);
       }
-    }
-    ,
-    mounted() {
     }
   },
 }

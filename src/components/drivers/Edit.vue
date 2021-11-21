@@ -15,11 +15,13 @@
         <div class="mb-3">
           <label for="name" class="float-start form-label">Name</label>
           <input v-model="name" type="text" class="form-control" id="name">
+          <div v-if="v$.name.$invalid" class="text-danger">Name is required</div>
         </div>
 
         <div class="mb-3">
           <label for="last_name" class="float-start form-label">Last name</label>
           <input v-model="last_name" type="text" class="form-control" id="last_name">
+          <div v-if="v$.last_name.$invalid" class="text-danger">Lastname is required</div>
         </div>
 
         <div class="mb-3">
@@ -30,22 +32,24 @@
         <div class="mb-3">
           <label for="hours_worked" class="float-start form-label">Hours worked</label>
           <input v-model="hours_worked" type="text" class="form-control" id="hours_worked">
+          <div v-if="v$.hours_worked.$invalid" class="text-danger">Value is incorrect</div>
         </div>
 
         <div class="form-group mb-3">
           <label for="city" class="form-label float-start">City</label>
           <select v-model="city" name="city" class="form-control" id="city">
-            <option value="" disabled selected>Select city</option>
+            <option value="" disabled >Select city</option>
             <template v-for="city in cities">
               <option :value=city.id>{{ city.city }}</option>
             </template>
           </select>
+          <div v-if="v$.city.$invalid" class="text-danger">City is required</div>
         </div>
 
         <div class="form-group mb-3">
           <label for="truck" class="form-label float-start">Truck</label>
           <select v-model="truck" name="truck" class="form-control" id="truck">
-            <option value="" disabled selected>Select truck</option>
+            <option value="" disabled >Select truck</option>
             <template v-for="truck in available_trucks">
               <option :value=truck.id>{{ truck.model }}</option>
             </template>
@@ -55,16 +59,14 @@
         <div class="form-group mb-3">
           <label for="status" class="form-label float-start">Status</label>
           <select v-model="status" name="status" class="form-control" id="status">
-            <option value="" disabled selected>Select status</option>
+            <option  disabled >Select status</option>
             <template v-for="(status) in statuses">
               <option :value=status.toUpperCase()>{{ status }}</option>
             </template>
           </select>
         </div>
-
       </form>
     </div>
-
   </div>
 </template>
 
@@ -72,11 +74,31 @@
 
 import {actionTypes} from "@/stores/actionTypes";
 import BaseButton from "@/components/base-components/BaseButton";
+import useVuelidate from '@vuelidate/core'
+import {alpha, between, minLength, required, numeric} from "@vuelidate/validators";
 
 export default {
   name: "Edit",
   components: {BaseButton},
+  setup() {
+    return {v$: useVuelidate()}
+  },
+  validations() {
+    return {
+      name: {required,alpha,  minLength: minLength(2)},
+      last_name: {required,alpha,  minLength: minLength(2)},
+      city: {required},
+      hours_worked: {
+        required: required,
+        numeric: numeric,
+        between: between(0, 176),
+      },
+    }
+  },
   computed: {
+    formIsValid() {
+      return !this.v$.name.$invalid && !this.v$.last_name.$invalid && !this.v$.city.$invalid && !this.v$.hours_worked.$invalid
+    },
     mainStore: {
       get() {
         return this.$store.state.driverTab.forms.driverEdit;
@@ -160,20 +182,25 @@ export default {
     }
 
 
-  },
+  }
+  ,
   beforeMount() {
     this.$store.commit('updateDriverIdToEdit', this.$route.params.id)
     this.$store.dispatch(actionTypes.GET_DRIVER_BY_ID);
-  },
+  }
+  ,
   mounted() {
     this.$store.dispatch(actionTypes.GET_DRIVER_STATUSES);
     this.$store.dispatch(actionTypes.GET_AVAILABLE_TRUCKS);
     this.$store.dispatch(actionTypes.GET_CITIES);
-  },
+  }
+  ,
   methods: {
     update() {
-      this.$store.dispatch(actionTypes.UPDATE_DRIVER);
-      this.$router.push("/drivers");
+      if (this.formIsValid) {
+        this.$store.dispatch(actionTypes.UPDATE_DRIVER);
+        this.$router.push("/drivers");
+      }
     }
   }
 
