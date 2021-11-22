@@ -50,8 +50,7 @@
         </form>
       </div>
     </div>
-
-
+    {{ this.order.way_points }}
   </div>
 </template>
 
@@ -95,6 +94,7 @@ export default {
       orderToUpdate: {
         driver: {},
         shipments: [],
+        waypoints: []
       }
     }
   },
@@ -127,10 +127,22 @@ export default {
           this.orderToUpdate.shipments.push(shipment);
         }
       }
-      console.log(this.orderToUpdate.shipments);
+
+      let wayPoints = this.order.way_points;
+      this.orderToUpdate.waypoints = wayPoints;
+      let self = this;
+
+      for (let wayPoint of wayPoints) {
+        this.orderToUpdate.shipments.some(function (updatedShipment) {
+          if (wayPoint.shipment.id === updatedShipment.id) {
+            wayPoint.shipment = updatedShipment;
+            let index = self.orderToUpdate.waypoints.indexOf(wayPoint);
+            self.orderToUpdate.waypoints[index] = wayPoint;
+          }
+        });
+      }
     }
   },
-
 }
 </script>
 
