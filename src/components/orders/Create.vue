@@ -197,13 +197,13 @@ export default {
       }
     },
     addToOrderDrivers(driver) {
-      if (!this.isInclude(this.transportOrder.drivers, driver)) {
-        this.transportOrder.drivers.push(driver)
-      } else {
+      if (this.transportOrder.drivers.some(e => e.id === driver.id)) {
         const index = this.transportOrder.drivers.indexOf(driver);
         if (index > -1) {
           this.transportOrder.drivers.splice(index, 1);
         }
+      } else {
+        this.transportOrder.drivers.push(driver);
       }
     },
     addToOrderTruck(truck) {
