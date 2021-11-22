@@ -38,7 +38,7 @@
         <div class="form-group mb-3">
           <label for="city" class="form-label float-start">City</label>
           <select v-model="city" name="city" class="form-control" id="city">
-            <option value="" disabled >Select city</option>
+            <option value="" disabled>Select city</option>
             <template v-for="city in cities">
               <option :value=city.id>{{ city.city }}</option>
             </template>
@@ -49,7 +49,7 @@
         <div class="form-group mb-3">
           <label for="truck" class="form-label float-start">Truck</label>
           <select v-model="truck" name="truck" class="form-control" id="truck">
-            <option value="" disabled >Select truck</option>
+            <option value="" disabled>Select truck</option>
             <template v-for="truck in available_trucks">
               <option :value=truck.id>{{ truck.model }}</option>
             </template>
@@ -59,7 +59,7 @@
         <div class="form-group mb-3">
           <label for="status" class="form-label float-start">Status</label>
           <select v-model="status" name="status" class="form-control" id="status">
-            <option  disabled >Select status</option>
+            <option disabled>Select status</option>
             <template v-for="(status) in statuses">
               <option :value=status.toUpperCase()>{{ status }}</option>
             </template>
@@ -75,7 +75,7 @@
 import {actionTypes} from "@/stores/actionTypes";
 import BaseButton from "@/components/base-components/BaseButton";
 import useVuelidate from '@vuelidate/core'
-import {alpha, between, minLength, required, numeric} from "@vuelidate/validators";
+import {alpha, between, minLength, numeric, required} from "@vuelidate/validators";
 
 export default {
   name: "Edit",
@@ -85,8 +85,8 @@ export default {
   },
   validations() {
     return {
-      name: {required,alpha,  minLength: minLength(2)},
-      last_name: {required,alpha,  minLength: minLength(2)},
+      name: {required, alpha, minLength: minLength(2)},
+      last_name: {required, alpha, minLength: minLength(2)},
       city: {required},
       hours_worked: {
         required: required,

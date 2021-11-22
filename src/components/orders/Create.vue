@@ -106,7 +106,7 @@ $axios.interceptors.response.use(
 
 
 export default {
-  name: "OrderPage",
+  name: "Create",
   components: {ShipmentToDeliver, BaseButton, OrderDriver, OrderTruck},
   mounted() {
     this.getShipments()
@@ -245,14 +245,13 @@ export default {
             })
             .catch(function (error) {
               if (error.response.data.error_description === "") {
-                let response = "Please input data"
+                // let response = "Please input data"
                 useToast().warning(response)
               } else
                 useToast().warning(error.response.data.error_description)
             });
       } else {
-        let response = "Please input data"
-        useToast().warning(response)
+        useToast().warning("Please input data")
       }
     },
     isInclude(arr, object2) {

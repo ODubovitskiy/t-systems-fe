@@ -6,8 +6,8 @@ import TruckEdit from "@/components/trucks/Edit";
 import DriverEdit from "@/components/drivers/Edit";
 import TrucksPage from "@/components/trucks/TrucksPage";
 import DriversPage from "@/components/drivers/DriversPage";
-import DriverPA from "@/components/DriverPA";
-import OrderPage from "@/components/orders/OrderPage";
+import DriverPA from "@/components/personalAccount/DriverPA";
+import Create from "@/components/orders/Create";
 import Orders from "@/components/orders/Orders";
 import EditPage from "@/components/orders/EditPage";
 import AuthForm from "@/components/AuthForm";
@@ -40,7 +40,7 @@ const routes = [
     },
     {
         path: '/orders/create',
-        component: OrderPage
+        component: Create
     },
     {
         path: '/orders',

@@ -3,10 +3,7 @@
     <div class="row">
       <div class=" form-group mb-3">
         <div class="row">
-          <div class="col-6">{{ shipment.name }}</div>
-
-          <div class="col-6">
-            <label for="shipment" class="form-label float-start">Status</label>
+            <label for="shipment" class="form-label float-start">{{ shipment.name }}</label>
             <select @change="statusChanged" v-model="this.shipmentStatus" name="shipment" class="form-control"
                     id="shipment">
               <option value="" disabled selected>Select shipment status</option>
@@ -14,8 +11,6 @@
                 <option :value=status>{{ status }}</option>
               </template>
             </select>
-          </div>
-
         </div>
       </div>
     </div>

@@ -3,7 +3,7 @@
     <div class="container">
       <div class="row">
         <OrderToEdit
-        :order="order"/>
+            :order="order"/>
       </div>
     </div>
   </div>
@@ -12,7 +12,7 @@
 <script>
 
 import axios from "axios";
-import OrderToEdit from "@/components/orders/OrderToEdit";
+import OrderToEdit from "@/components/orders/Edit";
 
 const $axios = axios.create({
   headers: {'Authorization': localStorage.getItem("dataToken")}
