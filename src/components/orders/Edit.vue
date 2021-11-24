@@ -2,12 +2,12 @@
   <div class="order-to-edit">
     <div class="row">
       <div class="sidebar col-md-2">
-        <BaseButton
-            :button="{
-                name : 'Save',
-                type : 'button',
-                class : 'btn btn-outline-info'}"
-            v-on:callback="update()"/>
+        <BaseRouterLink
+            :link="{
+        class : 'btn btn-outline-secondary m-2',
+        path: '/drivers/personal-account/',
+        name: 'Back to personal account'
+       }"/>
       </div>
 
       <div class="col-md-10">
@@ -19,7 +19,8 @@
                 <div class="h3 text-muted">Driver information</div>
                 <div class="form-group mb-3">
                   <label for="status" class="form-label float-start">Status</label>
-                  <select v-model="driverStatus" name="status" class="form-control" id="status">
+                  <select @change="updateDriverStatus" v-model="driverStatus" name="status" class="form-control"
+                          id="status">
                     <option value="" disabled selected>Select status</option>
                     <template v-for="status of this.driverStatuses">
                       <option :value=status>{{ status }}</option>
@@ -30,6 +31,12 @@
                   <label for="hours_worked" class="float-start form-label">Hours worked</label>
                   <input v-model="hoursWorked" type="text" class="form-control" id="hours_worked">
                 </div>
+                <BaseButton
+                    :button="{
+                name : 'Update driver info',
+                type : 'button',
+                class : 'btn btn-outline-info'}"
+                    v-on:callback="update()"/>
               </div>
               <div class="order-info col-5   m-3">
                 <div class="h3 text-muted">Order information</div>
@@ -44,13 +51,18 @@
                         @shipmentStatusChanged="updateShipments"/>
                   </div>
                 </div>
+                <BaseButton
+                    :button="{
+                name : 'Update order info',
+                type : 'button',
+                class : 'btn btn-outline-info'}"
+                    v-on:callback="update()"/>
               </div>
             </div>
           </div>
         </form>
       </div>
     </div>
-    {{ this.order.way_points }}
   </div>
 </template>
 
@@ -58,6 +70,7 @@
 import axios from "axios";
 import EditShipment from "@/components/orders/EditShipment"
 import BaseButton from "@/components/base-components/BaseButton";
+import BaseRouterLink from "@/components/base-components/BaseRouterLink"
 
 const $axios = axios.create({
   headers: {'Authorization': localStorage.getItem("dataToken")}
@@ -83,7 +96,7 @@ export default {
   name: "Edit",
   props: ["order"],
   components: {
-    EditShipment, BaseButton
+    EditShipment, BaseButton, BaseRouterLink
   },
   data() {
     return {
@@ -92,7 +105,6 @@ export default {
       hoursWorked: "",
       shipments: [],
       orderToUpdate: {
-        driver: {},
         shipments: [],
         waypoints: []
       }
@@ -100,6 +112,7 @@ export default {
   },
   mounted() {
     this.getDriverStatuses();
+    this.checkRouteParams();
   },
   methods: {
     getDriverStatuses() {
@@ -141,6 +154,25 @@ export default {
           }
         });
       }
+    },
+    updateDriverStatus() {
+      let self = this;
+      this.orderToUpdate.drivers = this.order.drivers;
+      this.orderToUpdate.drivers.some(function (dr) {
+        if (dr.personal_number === JSON.parse(localStorage.currentUser).personal_number) {
+          dr.status = self.driverStatus;
+        }
+      });
+    },
+    checkRouteParams() {
+      // console.log(this.order)
+      // let parameters = this.$route.params
+      // $axios.get("http://localhost:5000/api/order-drivers-verification", {
+      //   params: {
+      //     orderId : parameters.id,
+      //     driver_personal_number : parameters.personal_number,
+      //   }
+      // })
     }
   },
 }
