@@ -2,7 +2,7 @@
 
 
   <nav class="navbar navbar-expand-lg navbar-light bg-light mt-4">
-    <div class="container-fluid">
+    <div class="container-fluid" style="position: relative">
       <button aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler"
               data-bs-target="#navbar" data-bs-toggle="collapse" type="button">
         <span class="navbar-toggler-icon"></span>
@@ -21,12 +21,15 @@
             <router-link class="nav-link " to="/orders">Orders</router-link>
           </li>
           <li v-if="currentUser.hours_worked" class="nav-item">
-            <router-link class="nav-link " to="/drivers/personal-account/">Driver Personal Account</router-link>
+            <router-link class="nav-link" :to='"/drivers/" + currentUser.personal_number + "/personal-account/"'>Driver Personal Account</router-link>
           </li>
         </ul>
         <form class="d-flex">
           <div class="d-flex" v-if="currentUser">
-            <span class="w-100">{{ currentUser.name }} {{ currentUser.last_name }} </span>
+            <span style="white-space: nowrap; padding: 0 8px; display: flex; align-items: center;">{{
+                currentUser.name }}&nbsp;{{
+                currentUser.last_name
+              }}</span>
             <BaseButton
                 :button="{
                 name : 'Logout',
@@ -35,7 +38,7 @@
                 v-on:callback="logout()"
             />
           </div>
-          <div class="d-flex" v-else>
+          <div class="d-flex" style="position: absolute; top: -8px; right: 8px" v-else >
             <BaseRouterLink
                 :link="{
                 name : 'Login',

@@ -55,11 +55,11 @@ const routes = [
         component: TruckEdit
     },
     {
-        path: '/drivers/personal-account/',
+        path: '/drivers/:personal_number/personal-account/',
         component: DriverPA
     },
     {
-        path: '/orders/:id/edit',
+        path: '/drivers/:personal_number/orders/:id/edit',
         component: EditPage
     },
 ]
@@ -72,3 +72,4 @@ const router = createRouter({
 })
 
 export default router
+

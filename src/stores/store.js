@@ -370,12 +370,12 @@ export default createStore({
         },
         [actionTypes.SUBMIT_FORM_ADD_DRIVER]({commit, state}) {
             let formData = state.driverTab.forms.addDriver;
-            return $axios.post("http://localhost:5000/api/drivers", formData)
+            return $axios.post("http://localhost:5000/api/drivers",  formData)
                 .then(function (response) {
-                    useToast().success(response.data.name + " " + response.data.last_name + " has been stored in database", {})
+                    useToast().success(response.data.name + " " + response.data.last_name + " has been stored in database")
                 })
                 .catch(function (error) {
-                    useToast().warning(error.response.data.error_description, {})
+                    useToast().warning(error.response.data.error_description)
                 });
         }, [actionTypes.GET_DRIVER_BY_ID]({commit, state}) {
             let id = state.driverTab.driverShow.id;
@@ -398,11 +398,15 @@ export default createStore({
             let id = state.driverTab.forms.driverEdit.id;
             return $axios.put("http://localhost:5000/api/drivers/" + id, formData)
                 .then(function (response) {
+                }) .catch(function (error) {
+                    useToast().warning(error.response.data.error_description)
                 });
         }, [actionTypes.GET_DRIVER_STATUSES]({commit, state}) {
             return $axios.get("http://localhost:5000/api/driver-statuses/")
                 .then(function (response) {
                     commit("updateDriverStatusesToEdit", response.data)
+                }).catch(function (error) {
+                    useToast().warning(error.response.data.error_description)
                 });
         }, [actionTypes.DELETE_DRIVER]({commit, state}) {
             let id = state.driverTab.driverDelete.id;

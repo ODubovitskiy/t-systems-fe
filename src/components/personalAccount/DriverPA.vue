@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="driver-personal-account">
     <div class="card text-dark bg-light mb-3">
       <h1 class="card-header">Driver {{ driver.name }} {{ driver.last_name }}</h1>
       <div class="card-body">
@@ -33,7 +33,7 @@
         <BaseRouterLink
             :link="{
                       class : 'btn btn-outline-info  m-2',
-                      path: '/orders/'+ this.transport_order.id + '/edit',
+                      path: '/drivers/'+currentUser.personal_number+'/orders/'+ this.transport_order.id + '/edit',
                       name: 'Manage order'}"
         />
       </div>
@@ -71,10 +71,22 @@ $axios.interceptors.response.use(
 export default {
   name: "DriverPA",
   components: {BaseRouterLink},
+  computed: {
+    currentUser: {
+      get() {
+        if (localStorage.getItem("dataToken"))
+          return JSON.parse(localStorage.getItem("currentUser"));
+      }
+    },
+    mainStore: {
+      get() {
+        return this.$store.state.auth;
+      }
+    }
+  },
   beforeMount() {
     let self = this;
-    let personalNumber = localStorage.getItem("currentUser").personal_number;
-    let url = "http://localhost:5000/api/drivers/personal-account/" + personalNumber;
+    let url = "http://localhost:5000/api/drivers/personal-account";
     return $axios.get(url)
         .then(function (response) {
           if (response.data.driver)

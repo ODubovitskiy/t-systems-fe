@@ -1,13 +1,13 @@
 <template>
   <div class="row">
     <div class="sidebar col-md-2">
-
-      <BaseButton
-          :button="{
+        <BaseButton
+            :button="{
                 name : 'Save',
                 type : 'button',
                 class : 'btn btn-outline-info'}"
-          v-on:callback="update()"/>
+            v-on:callback="update()"/>
+
     </div>
 
     <div class="col-md-10">

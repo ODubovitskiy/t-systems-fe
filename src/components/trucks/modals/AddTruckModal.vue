@@ -59,21 +59,24 @@
               <div v-if="v$.city.$invalid" class="text-danger">City is required</div>
             </div>
 
-            <div class="modal-footer float-end m-2">
-              <BaseButton
-                  v-on:callback="submitForm()"
-                  :button="{
+            <div class="d-flex" style="flex-direction: row;justify-content: flex-end">
+              <div class="container-btn" style="width: 250px; margin-right: 16px">
+                <BaseButton
+                    v-on:callback="submitForm()"
+                    :button="{
                 name : 'Save truck',
                 type : 'button',
                 class : 'btn btn-outline-info'}"/>
-
-              <BaseButton
-                  :button="{
+              </div>
+              <div class="container-btn" style="width: 250px;">
+                <BaseButton
+                    :button="{
                 name : 'Close',
                 type : 'button',
                 class : 'btn btn-outline-danger',
                 dismiss: 'modal'
                 }"/>
+             </div>
             </div>
           </form>
         </div>

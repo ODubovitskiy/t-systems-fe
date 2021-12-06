@@ -1,5 +1,7 @@
 <template>
-  <div class="order-to-edit">
+  <div>
+    <div class="order-to-edit">
+    </div>
     <div class="row">
       <div class="sidebar col-md-2">
         <BaseRouterLink
@@ -19,7 +21,7 @@
                 <div class="h3 text-muted">Driver information</div>
                 <div class="form-group mb-3">
                   <label for="status" class="form-label float-start">Status</label>
-                  <select @change="updateDriverStatus" v-model="driverStatus" name="status" class="form-control"
+                  <select v-model="driverStatus" name="status" class="form-control"
                           id="status">
                     <option value="" disabled selected>Select status</option>
                     <template v-for="status of this.driverStatuses">
@@ -33,30 +35,25 @@
                 </div>
                 <BaseButton
                     :button="{
-                name : 'Update driver info',
+                name : 'Update order',
                 type : 'button',
                 class : 'btn btn-outline-info'}"
-                    v-on:callback="update()"/>
+                    v-on:callback="updateOrder()"/>
               </div>
               <div class="order-info col-5   m-3">
                 <div class="h3 text-muted">Order information</div>
                 <div class="form-group mb-3">
                   <div v-for="waypoint in this.order.way_points">
-                    {{ addToShipments(waypoint.shipment) }}
+                    <template>
+                      {{ addToShipments(waypoint.shipment) }}
+                    </template>
                   </div>
-
                   <div v-for="shipment of this.shipments">
-                    <EditShipment
-                        :shipment="shipment"
-                        @shipmentStatusChanged="updateShipments"/>
+                      <EditShipment
+                          :shipment="shipment"
+                          @shipmentStatusChanged="updateShipments"/>
                   </div>
                 </div>
-                <BaseButton
-                    :button="{
-                name : 'Update order info',
-                type : 'button',
-                class : 'btn btn-outline-info'}"
-                    v-on:callback="update()"/>
               </div>
             </div>
           </div>
@@ -71,6 +68,7 @@ import axios from "axios";
 import EditShipment from "@/components/orders/EditShipment"
 import BaseButton from "@/components/base-components/BaseButton";
 import BaseRouterLink from "@/components/base-components/BaseRouterLink"
+import {useToast} from "vue-toastification";
 
 const $axios = axios.create({
   headers: {'Authorization': localStorage.getItem("dataToken")}
@@ -98,6 +96,7 @@ export default {
   components: {
     EditShipment, BaseButton, BaseRouterLink
   },
+  computed: {},
   data() {
     return {
       driverStatus: "",
@@ -105,14 +104,19 @@ export default {
       hoursWorked: "",
       shipments: [],
       orderToUpdate: {
+        id: "",
+        status: "",
+        number: "",
+        truck: {},
+        drivers: [],
         shipments: [],
-        waypoints: []
+        way_points: [],
+        travel_time: "",
       }
     }
   },
   mounted() {
     this.getDriverStatuses();
-    this.checkRouteParams();
   },
   methods: {
     getDriverStatuses() {
@@ -128,9 +132,6 @@ export default {
         this.shipments.push(shipment)
       }
     },
-    update() {
-
-    },
     updateShipments(shipment) {
       if (this.orderToUpdate.shipments.length === 0) {
         this.orderToUpdate.shipments.push(shipment);
@@ -141,39 +142,43 @@ export default {
         }
       }
 
-      let wayPoints = this.order.way_points;
-      this.orderToUpdate.waypoints = wayPoints;
+      this.orderToUpdate.way_points = this.order.way_points;
       let self = this;
 
-      for (let wayPoint of wayPoints) {
+      for (let wayPoint of this.orderToUpdate.way_points) {
         this.orderToUpdate.shipments.some(function (updatedShipment) {
           if (wayPoint.shipment.id === updatedShipment.id) {
             wayPoint.shipment = updatedShipment;
-            let index = self.orderToUpdate.waypoints.indexOf(wayPoint);
-            self.orderToUpdate.waypoints[index] = wayPoint;
+            let index = self.orderToUpdate.way_points.indexOf(wayPoint);
+            self.orderToUpdate.way_points[index] = wayPoint;
           }
         });
       }
     },
-    updateDriverStatus() {
+    updateOrder() {
+      this.orderToUpdate = this.order
       let self = this;
-      this.orderToUpdate.drivers = this.order.drivers;
+      let currentDriver = {};
       this.orderToUpdate.drivers.some(function (dr) {
         if (dr.personal_number === JSON.parse(localStorage.currentUser).personal_number) {
           dr.status = self.driverStatus;
+          currentDriver = dr;
         }
       });
+      for (const secondDriver of this.orderToUpdate.drivers) {
+        if (secondDriver !== currentDriver) {
+          secondDriver.status = currentDriver.status === "DRIVING" ? "ON SHIFT" : "DRIVING"
+        }
+      }
+      currentDriver.hours_worked = this.hoursWorked;
+      console.log(this.orderToUpdate.drivers);
+      $axios.put("http://localhost:5000/api/orders/" + this.order.id, this.orderToUpdate
+      ).then(function (response) {
+        useToast().success("Order has been successfully updated", {})
+      }).catch(function (error) {
+        useToast().warning(error.response.data.error_description)
+      });
     },
-    checkRouteParams() {
-      // console.log(this.order)
-      // let parameters = this.$route.params
-      // $axios.get("http://localhost:5000/api/order-drivers-verification", {
-      //   params: {
-      //     orderId : parameters.id,
-      //     driver_personal_number : parameters.personal_number,
-      //   }
-      // })
-    }
   },
 }
 </script>

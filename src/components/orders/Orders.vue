@@ -63,7 +63,6 @@
                 <table class="w-100 table table-hover">
                   <thead>
                   <tr class="text-center">
-                    <th>Shipment name</th>
                     <th>From (Loading)</th>
                     <th>To (Unloading)</th>
                   </tr>
